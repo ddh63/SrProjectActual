@@ -27,10 +27,6 @@ if(process.env.NODE_ENV !== 'production') {
 
 app.use(express.static(path.join(__dirname, 'dist')));
 
-app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/dist/index.html');
-});
-
 app.get('/api/getAllMovies', function(req, res) {
   pool.getConnection(function(err, connection) {
     connection.query('select * from movies', function(err, result) {
@@ -38,6 +34,10 @@ app.get('/api/getAllMovies', function(req, res) {
     });
     connection.release();
   });
+});
+
+app.get('*', function(req, res) {
+  res.sendFile(__dirname + '/dist/index.html');
 });
 
 app.listen(PORT, function(err) {
