@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import LoginForm from './LoginForm';
+import LoginFormLinks from './LoginFormLinks';
 
 class FormContainer extends Component {
 	constructor(props) {
@@ -15,14 +16,7 @@ class FormContainer extends Component {
 						<div className="col-md-6">
 							<div className="panel panel-login">
 								<div className="panel-heading">
-									<div className="row">
-										<div className="col-xs-6">
-											<a href="#" className="active">Login</a>
-										</div>
-										<div className="col-xs-6">
-											<a href="#">Register</a>
-										</div>
-									</div>
+									<LoginFormLinks value={this.props.value} />
 								</div>
 								<div className="panel-body">
 									<div className="row">
