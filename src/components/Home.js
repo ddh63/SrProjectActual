@@ -5,6 +5,7 @@ import HomeLanding from './HomeLanding';
 class Home extends Component {
 	constructor(props) {
 		super(props);
+    document.title = "Streaming Site";
 		this.state = {}
 	}
 

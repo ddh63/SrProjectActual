@@ -11,6 +11,7 @@ class LoginFormLinks extends Component {
 		let links = null;
 
 			if (this.props.value == "login") {
+				document.title = "Login";
 				links = (
 					<div className="row">
 						<div className="col-xs-6">
@@ -23,6 +24,7 @@ class LoginFormLinks extends Component {
 				);
 			}
 			else {
+				document.title = "Register";
 				links = (
 					<div className="row">
 						<div className="col-xs-6">
