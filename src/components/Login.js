@@ -12,7 +12,7 @@ class Login extends Component {
 		return (
 			<div>
 				<Nav />
-				<FormContainer />
+				<FormContainer value={this.props.route.path} />
 			</div>
 		);
 	}

@@ -23,7 +23,7 @@ class HomeLanding extends Component {
 						</p>
 						<div className="buttons text-center">
 							<PageLink to="login" className="btn btn-success" role="button">Login</PageLink>
-							<a href="#" className="btn btn-default" role="button">Register</a>
+							<PageLink to="register" className="btn btn-default" role="button">Register</PageLink>
 						</div>
 					</div>
 				</div>
