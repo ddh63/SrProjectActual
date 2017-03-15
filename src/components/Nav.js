@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PageLink from './PageLink';
 
 class Nav extends Component {
 	constructor(props) {
@@ -17,7 +18,7 @@ class Nav extends Component {
 							<span className="icon-bar"></span>
 							<span className="icon-bar"></span>
 						</button>
-						<a className="navbar-brand" href="index.html">Brand Name</a>
+						<PageLink to="/" className="navbar-brand">Brand Name</PageLink>
 					</div>
 
 					<div className="collapse navbar-collapse" id="collapse-items">

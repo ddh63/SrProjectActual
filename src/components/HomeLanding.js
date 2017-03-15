@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PageLink from './PageLink';
 
 class HomeLanding extends Component {
 	constructor(props) {
@@ -21,7 +22,7 @@ class HomeLanding extends Component {
 							proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 						</p>
 						<div className="buttons text-center">
-							<a href="login.html" className="btn btn-success" role="button">Login</a>
+							<PageLink to="login" className="btn btn-success" role="button">Login</PageLink>
 							<a href="#" className="btn btn-default" role="button">Register</a>
 						</div>
 					</div>

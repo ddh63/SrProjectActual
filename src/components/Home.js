@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Movies from './Movies';
 import Nav from './Nav';
 import HomeLanding from './HomeLanding';
 
