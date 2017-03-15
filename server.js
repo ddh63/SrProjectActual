@@ -13,6 +13,8 @@ var pool = mysql.createPool({
 var app = express();
 var PORT = process.env.PORT || 8080;
 
+var api = require('./api')(app, pool);
+
 // using webpack-dev-server and middleware in development environment
 if(process.env.NODE_ENV !== 'production') {
   var webpackDevMiddleware = require('webpack-dev-middleware');
@@ -26,15 +28,6 @@ if(process.env.NODE_ENV !== 'production') {
 }
 
 app.use(express.static(path.join(__dirname, 'dist')));
-
-app.get('/api/getAllMovies', function(req, res) {
-  pool.getConnection(function(err, connection) {
-    connection.query('select * from movies', function(err, result) {
-      res.json(result);
-    });
-    connection.release();
-  });
-});
 
 app.get('*', function(req, res) {
   res.sendFile(__dirname + '/dist/index.html');
