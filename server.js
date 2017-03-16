@@ -1,5 +1,6 @@
 var path = require('path');
 var express = require('express');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var mysql = require('mysql');
 
@@ -14,6 +15,15 @@ var pool = mysql.createPool({
 var app = express();
 var PORT = process.env.PORT || 8080;
 
+app.use(session({
+  secret: 'supersecret',
+  resave: true,
+  saveUninitialized: true
+}));
+
+var sess;
+
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 var api = require('./api')(app, pool);

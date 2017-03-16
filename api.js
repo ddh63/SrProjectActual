@@ -3,16 +3,29 @@ module.exports = function(app, pool) {
 	app.post('/api/login', function(req, res) {
 		var user = req.body.username;
 		var pass = req.body.password;
+
 		pool.getConnection(function(err, conn) {
 			if (err) throw err;
+
 			var query = 'select * from users where username='+conn.escape(user)+' LIMIT 1';
-			console.log("Query: "+query);
-			conn.query(query, function(err, res) {
+
+			conn.query(query, function(err, result) {
 				if (err) throw err;
-				console.log(res[0].password);
+
+				if (result.length) {
+					sess = req.session;
+					sess.username = user;
+					res.redirect('/');
+				}
+				else {
+					res.redirect('../login');
+				}
+
 			});
+
 			conn.release();
 		});
+
 	});
 
 	app.get('/api/getAllMovies', function(req, res) {
