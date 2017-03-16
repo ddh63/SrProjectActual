@@ -8,7 +8,7 @@ var pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'localpassword',
-  database: 'movies'
+  database: 'streamingsite'
 });
 
 var app = express();
