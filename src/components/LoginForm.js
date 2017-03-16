@@ -11,7 +11,7 @@ class LoginForm extends Component {
 
 		if (this.props.value == "login") {
 			form = (
-				<form id="login-form" action="#" method="post" role="form">
+				<form id="login-form" action="/api/login" method="post" role="form">
 					<div className="form-group">
 						<input type="text" name="username" id="username" tabIndex="1" className="form-control" placeholder="Username" />
 					</div>
