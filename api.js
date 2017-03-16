@@ -1,7 +1,9 @@
 module.exports = function(app, pool) {
 
 	app.post('/api/login', function(req, res) {
-		console.log("check");
+		var user = req.body.username;
+		var pass = req.body.password;
+		
 		res.redirect('/');
 	});
 

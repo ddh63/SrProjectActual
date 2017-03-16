@@ -14,6 +14,8 @@ var pool = mysql.createPool({
 var app = express();
 var PORT = process.env.PORT || 8080;
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 var api = require('./api')(app, pool);
 
 // using webpack-dev-server and middleware in development environment
