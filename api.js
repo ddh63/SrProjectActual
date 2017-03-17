@@ -28,6 +28,13 @@ module.exports = function(app, pool) {
 
 	});
 
+	app.get('/api/isLoggedIn', function(req, res) {
+		if (typeof sess == 'object' && sess.username)
+			res.json({'user': sess.username})
+		else
+			res.json({'user': 'no'});
+	});
+
 	app.get('/api/getAllMovies', function(req, res) {
 		/*
 			No Longer Works.
