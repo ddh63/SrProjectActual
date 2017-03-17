@@ -8,6 +8,26 @@ class Nav extends Component {
 	}
 
 	render() {
+		let navlinks = null;
+
+		if (this.props.user == null) {
+			navlinks = (
+				<ul className="nav navbar-nav navbar-right">
+					<li><a href="browse.html">Browse</a></li>
+					<li><PageLink to="register">Register</PageLink></li>
+					<li><PageLink to="login">Login</PageLink></li>
+				</ul>
+			);
+		}
+		else {
+			navlinks = (
+				<ul className="nav navbar-nav navbar-right">
+					<li><a href="browse.html">Browse</a></li>
+					<li><a href="#">{this.props.user}</a></li>
+				</ul>
+			);
+		}
+
 		return (
 			<nav className="navbar navbar-inverse">
 				<div className="container-fluid">
@@ -22,11 +42,7 @@ class Nav extends Component {
 					</div>
 
 					<div className="collapse navbar-collapse" id="collapse-items">
-						<ul className="nav navbar-nav navbar-right">
-							<li><a href="browse.html">Browse</a></li>
-							<li><a href="#">Link 2</a></li>
-							<li><a href="#">Link 3</a></li>
-						</ul>
+						{navlinks}
 					</div>
 				</div>
 			</nav>

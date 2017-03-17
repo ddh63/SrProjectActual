@@ -8,10 +8,28 @@ class HomeLanding extends Component {
 	}
 
 	render() {
+		let pagelinks = null;
+
+		if (this.props.user == null) {
+			pagelinks = (
+				<div className="buttons text-center">
+					<PageLink to="login" className="btn btn-success" role="button">Login</PageLink>
+					<PageLink to="register" className="btn btn-default" role="button">Register</PageLink>
+				</div>
+			);
+		}
+		else {
+			pagelinks = (
+				<div className="buttons text-center">
+					<PageLink to="browse" className="btn btn-success" role="button">Browse</PageLink>
+				</div>
+			);
+		}
+
 		return (
 			<div className="container-fluid site">
 				<div className="container flex-container">
-					<div className="col-md-6">
+					<div className="col-md-6 well">
 						<h1 className="text-center logo-header">Streaming Site</h1>
 						<p className="text-center main-description">
 							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -21,10 +39,7 @@ class HomeLanding extends Component {
 							cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
 							proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 						</p>
-						<div className="buttons text-center">
-							<PageLink to="login" className="btn btn-success" role="button">Login</PageLink>
-							<PageLink to="register" className="btn btn-default" role="button">Register</PageLink>
-						</div>
+						{pagelinks}
 					</div>
 				</div>
 			</div>

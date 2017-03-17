@@ -3,11 +3,22 @@ import Nav from './Nav';
 import PageLink from './PageLink';
 
 class NotFound extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			user: null
+		}
+
+		fetch('/api/isLoggedIn')
+			.then((response) => response.json())
+			.then((result) => this.setState({ user: result.user }));
+	}
+
  	render() {
  		document.title = "Page Not Found";
 	 	return (
 			<div>
-				<Nav />
+				<Nav user={this.state.user} />
 				<div className="container-fluid site">
 					<div className="container flex-container">
 						<div className="col-md-6">

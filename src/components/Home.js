@@ -7,11 +7,9 @@ class Home extends Component {
 		super(props);
     	document.title = "Streaming Site";
 		this.state = {
-			user: ''
+			user: null
 		}
-	}
 
-	componentDidMount() {
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
 			.then((result) => this.setState({ user: result.user }));
@@ -20,8 +18,8 @@ class Home extends Component {
   render() {
     return (
       <div>
-      	<Nav />
-      	<HomeLanding />
+      	<Nav user={this.state.user} />
+      	<HomeLanding user={this.state.user} />
       </div>
     );
   }
