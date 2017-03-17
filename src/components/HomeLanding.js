@@ -22,6 +22,7 @@ class HomeLanding extends Component {
 			pagelinks = (
 				<div className="buttons text-center">
 					<PageLink to="browse" className="btn btn-success" role="button">Browse</PageLink>
+					<a href="/api/logout" className="btn btn-default" role="button">Logout</a>
 				</div>
 			);
 		}

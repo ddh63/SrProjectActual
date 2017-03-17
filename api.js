@@ -28,6 +28,17 @@ module.exports = function(app, pool) {
 
 	});
 
+	app.get('/api/logout', function(req, res) {
+		req.session.destroy(function(err) {
+			if (err)
+				console.log(err);
+			else {
+				sess = req.session;
+				res.redirect('/');
+			}
+		});
+	});
+
 	app.get('/api/isLoggedIn', function(req, res) {
 		if (typeof sess == 'object' && sess.username)
 			res.json({'user': sess.username})
