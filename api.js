@@ -32,7 +32,7 @@ module.exports = function(app, pool) {
 		if (typeof sess == 'object' && sess.username)
 			res.json({'user': sess.username})
 		else
-			res.json({'user': 'no'});
+			res.json({'user': ''});
 	});
 
 	app.get('/api/getAllMovies', function(req, res) {

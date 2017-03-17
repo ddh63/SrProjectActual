@@ -14,8 +14,7 @@ class Home extends Component {
 	componentDidMount() {
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
-			.then((result) => this.setState({ user: result }));
-		console.log(this.state.user);
+			.then((result) => this.setState({ user: result.user }));
 	}
 
   render() {
