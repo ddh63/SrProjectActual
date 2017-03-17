@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import Nav from './Nav';
 import PageLink from './PageLink';
+import Loading from './Loading';
 
 class NotFound extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: null
+			user: null,
+			loaded: false
 		}
 
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
-			.then((result) => this.setState({ user: result.user }));
+			.then((result) => this.setState({ user: result.user, loaded: true }));
 	}
 
  	render() {
  		document.title = "Page Not Found";
+ 		if (!this.state.loaded) return <Loading />;
 	 	return (
 			<div>
 				<Nav user={this.state.user} />
