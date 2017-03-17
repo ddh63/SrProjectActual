@@ -2,15 +2,6 @@ var path = require('path');
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
-
-var pool = mysql.createPool({
-  connectionLimit: 10,
-  host: 'localhost',
-  user: 'root',
-  password: 'localpassword',
-  database: 'streamingsite'
-});
 
 var app = express();
 var PORT = process.env.PORT || 8080;
@@ -26,7 +17,7 @@ var sess;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var api = require('./api')(app, pool);
+var api = require('./api')(app);
 
 // using webpack-dev-server and middleware in development environment
 if(process.env.NODE_ENV !== 'production') {

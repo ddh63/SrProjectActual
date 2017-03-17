@@ -30,7 +30,7 @@ class LoginForm extends Component {
 		}
 		else {
 			form = (
-				<form id="register-form" action="#" method="post" role="form">
+				<form id="register-form" action="/api/register" method="post" role="form">
 					<div className="form-group">
 						<input type="text" name="username" id="username" tabIndex="1" className="form-control" placeholder="Username" />
 					</div>
@@ -41,7 +41,7 @@ class LoginForm extends Component {
 						<input type="password" name="password" id="password" tabIndex="2" className="form-control" placeholder="Password" />
 					</div>
 					<div className="form-group">
-						<input type="password" name="confirm-password" id="confirm-password" tabIndex="2" className="form-control" placeholder="Confirm Password" />
+						<input type="password" name="confirmpassword" id="confirm-password" tabIndex="2" className="form-control" placeholder="Confirm Password" />
 					</div>
 					<div className="form-group">
 						<div className="row">
