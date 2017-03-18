@@ -54,6 +54,10 @@ body {
 	Login/Register
  *******************/
 
+#fail-message h4 {
+	margin-top: 0;
+}
+
 .panel {
 	border-radius: 0;
 	background-color: #222;
