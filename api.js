@@ -25,9 +25,16 @@ module.exports = function(app, pool) {
 				if (err) throw err;
 
 				if (result.length) {
-					sess = req.session;
-					sess.username = user;
-					res.redirect('/');
+					bcrypt.compare(pass, result[0].password, function(err, passresult) {
+						if (passresult) {
+							sess = req.session;
+							sess.username = user;
+							res.redirect('/');
+						}
+						else {
+							res.redirect('../login');
+						}
+					});
 				}
 				else {
 					res.redirect('../login');
