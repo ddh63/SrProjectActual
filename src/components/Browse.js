@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Loading from './Loading';
 import Nav from './Nav';
+import BrowseMovies from './BrowseMovies';
 
 class Browse extends Component {
 	constructor(props) {
@@ -31,14 +32,7 @@ class Browse extends Component {
 						</div>
 					</div>
 
-					<div className="row">
-						<div className="col-md-3 col-sm-6">
-							<div className="well video">
-								<img src="img/posterplaceholder.png" />
-								<h4 className="text-center">Video Title</h4>
-							</div>
-						</div>
-					</div>
+					<BrowseMovies />
 				</div>
 			</div>
 		);
