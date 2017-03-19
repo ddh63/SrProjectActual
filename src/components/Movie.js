@@ -8,12 +8,18 @@ class Movie extends Component {
 		super(props);
 		this.state = {
 			user: null,
-			loaded: false
+			loaded: false,
+			movie: []
 		}
 
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
-			.then((result) => this.setState({ user: result.user, loaded: true }));
+			.then((result) => this.setState({ user: result.user }));
+
+		fetch('/api/getSingleMovie?id='+this.props.params.id)
+			.then((response) => response.json())
+			.then((result) => this.setState({ movie: result, loaded: true }));
+
 	}
 
 	render() {
@@ -21,7 +27,9 @@ class Movie extends Component {
 		return (
 			<div>
 				<Nav user={this.state.user} />
-				<h1 className="video-title">{this.props.params.id}</h1>
+				<div className="container">
+					<h1 className="video-title"><strong>{this.state.movie[0].title}</strong> ({this.state.movie[0].year})</h1>
+				</div>
 			</div>
 		);
 	}

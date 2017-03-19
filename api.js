@@ -98,7 +98,7 @@ module.exports = function(app, pool) {
 	app.get('/api/logout', function(req, res) {
 		req.session.destroy(function(err) {
 			if (err)
-				console.log(err);
+				throw err;
 			else {
 				sess = req.session;
 				res.redirect('/');
@@ -114,12 +114,23 @@ module.exports = function(app, pool) {
 	});
 
 	app.get('/api/getAllMovies', function(req, res) {
-	  pool.getConnection(function(err, connection) {
-	    connection.query('select * from movies', function(err, result) {
+	  pool.getConnection(function(err, conn) {
+	    conn.query('select * from movies', function(err, result) {
+	      if (err) throw err;
 	      res.json(result);
 	    });
-	    connection.release();
+	    conn.release();
 	  });
+	});
+
+	app.get('/api/getSingleMovie', function(req, res) {
+		pool.getConnection(function(err, conn) {
+			conn.query('select * from movies where id='+conn.escape(req.query.id), function(err, result) {
+				if (err) throw err;
+				res.json(result);
+			});
+			conn.release();
+		});
 	});
 	
 }
