@@ -26,7 +26,7 @@ class Browse extends Component {
 					<div className="row">
 						<div className="col-md-6 col-md-offset-3 well">
 							<form className="search-form">
-								<input name="search" autocomplete="off" type="search" placeholder="Search..." />
+								<input name="search" autoComplete="off" type="search" placeholder="Search..." />
 								<button className="btn btn-success button" type="submit">Search</button>
 							</form>
 						</div>

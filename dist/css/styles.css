@@ -149,3 +149,7 @@ body {
 .video img {
 	width: 100%;
 }
+
+.video-title {
+	color: #bbb;
+}
