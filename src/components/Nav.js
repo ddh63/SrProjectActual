@@ -13,7 +13,7 @@ class Nav extends Component {
 		if (this.props.user == null) {
 			navlinks = (
 				<ul className="nav navbar-nav navbar-right">
-					<li><a href="browse.html">Browse</a></li>
+					<li><PageLink to="browse">Browse</PageLink></li>
 					<li><PageLink to="register">Register</PageLink></li>
 					<li><PageLink to="login">Login</PageLink></li>
 				</ul>
@@ -22,7 +22,7 @@ class Nav extends Component {
 		else {
 			navlinks = (
 				<ul className="nav navbar-nav navbar-right">
-					<li><a href="browse.html">Browse</a></li>
+					<li><PageLink to="browse">Browse</PageLink></li>
 					<li><a href="#">{this.props.user}</a></li>
 				</ul>
 			);

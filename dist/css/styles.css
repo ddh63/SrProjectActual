@@ -44,7 +44,7 @@ body {
 	margin-right: 10px;
 }
 
-.site .well {
+.well {
 	background-color: #222;
 	border-color: #101010;
 	border-radius: 0;
@@ -139,8 +139,13 @@ body {
 }
 
 .button {
+	margin-top: -2px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	border-radius: 0;
 	width: 20%;
+}
+
+.video img {
+	width: 100%;
 }
