@@ -28,7 +28,14 @@ class Movie extends Component {
 			<div>
 				<Nav user={this.state.user} />
 				<div className="container">
-					<h1 className="video-title"><strong>{this.state.movie[0].title}</strong> ({this.state.movie[0].year})</h1>
+					<div className="row">
+						<div className="col-sm-4 poster well">
+							<img src="/img/posterplaceholder.png" />
+						</div>
+						<div className="col-sm-8 well">
+							<h1 className="text-center site"><strong>{this.state.movie[0].title}</strong> ({this.state.movie[0].year})</h1>
+						</div>
+					</div>
 				</div>
 			</div>
 		);
