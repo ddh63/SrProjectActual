@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 class BrowseMovies extends Component {
 	constructor(props) {
 		super(props);
+		// TODO: Make a video type state to know to link to movie/tv/other
 		this.state = {
 			videos: []
 		}
-
+		
 		fetch('/api/getAllMovies')
       .then((response) => response.json())
       .then(result => this.setState({ videos: result }));

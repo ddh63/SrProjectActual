@@ -12,6 +12,8 @@ class Browse extends Component {
 			loaded: false
 		};
 
+		document.title = "Browse";
+
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
 			.then((result) => this.setState({ user: result.user, loaded: true }));
