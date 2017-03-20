@@ -13,9 +13,9 @@ class Nav extends Component {
 		if (this.props.user == null) {
 			navlinks = (
 				<ul className="nav navbar-nav navbar-right">
-					<li><PageLink to="browse">Browse</PageLink></li>
-					<li><PageLink to="register">Register</PageLink></li>
-					<li><PageLink to="login">Login</PageLink></li>
+					<li><PageLink to="/browse">Browse</PageLink></li>
+					<li><PageLink to="/register">Register</PageLink></li>
+					<li><PageLink to="/login">Login</PageLink></li>
 				</ul>
 			);
 		}

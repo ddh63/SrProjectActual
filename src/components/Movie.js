@@ -32,6 +32,7 @@ class Movie extends Component {
 
 	render() {
 		if (!this.state.loaded) return <Loading />;
+		document.title = this.state.movie[0].title + " (" + this.state.movie[0].year + ")";
 		return (
 			<div>
 				<Nav user={this.state.user} />

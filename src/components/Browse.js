@@ -9,7 +9,8 @@ class Browse extends Component {
 		super(props);
 		this.state = {
 			user: null,
-			loaded: false
+			loaded: false,
+			videos: []
 		};
 
 		document.title = "Browse";
@@ -17,8 +18,13 @@ class Browse extends Component {
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
 			.then((result) => this.setState({ user: result.user, loaded: true }));
+
+		fetch('/api/getAllMovies')
+      .then((response) => response.json())
+      .then(result => this.setState({ videos: result }));
 	}
 
+	// TODO: Make the search into a stateless component controlled by this component
 	render() {
 		if (!this.state.loaded) return <Loading />;
 		return (
@@ -34,7 +40,7 @@ class Browse extends Component {
 						</div>
 					</div>
 
-					<BrowseMovies />
+					<BrowseMovies videos={this.state.videos} />
 				</div>
 			</div>
 		);
