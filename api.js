@@ -132,4 +132,17 @@ module.exports = function(app, pool) {
 		});
 	});
 	
+	app.post('/api/getSearch', function(req, res) {
+		var searchValue = req.body.search;
+
+		pool.getConnection(function(err, conn) {
+			conn.query('select * from movies where title like ' + conn.escape('%'+searchValue+'%'), function(err, result) {
+				if (err) throw err;
+				res.json(result);
+			});
+			conn.release();
+		});
+		
+	});
+
 }

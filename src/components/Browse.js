@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Loading from './Loading';
 import Nav from './Nav';
+import BrowseSearch from './BrowseSearch';
 import BrowseMovies from './BrowseMovies';
 
 class Browse extends Component {
@@ -10,6 +11,7 @@ class Browse extends Component {
 		this.state = {
 			user: null,
 			loaded: false,
+			search: '',
 			videos: []
 		};
 
@@ -22,6 +24,33 @@ class Browse extends Component {
 		fetch('/api/getAllMovies')
       .then((response) => response.json())
       .then(result => this.setState({ videos: result }));
+
+    this.handleSearch = this.handleSearch.bind(this);
+		this.searchSubmit = this.searchSubmit.bind(this);
+	}
+
+	handleSearch(e) {
+		this.setState({ search: e.target.value });
+	}
+
+	searchSubmit(e) {
+		e.preventDefault();
+
+		var data = {
+			'search': this.state.search
+		}
+
+		$.ajax({
+			type: 'POST',
+			url: '/api/getSearch',
+			data: data
+		})
+		.done((data) => {
+			this.setState({ videos: data });
+		})
+		.fail((jqXhr) => {
+			console.log("AJAX failure");
+		})
 	}
 
 	// TODO: Make the search into a stateless component controlled by this component
@@ -31,14 +60,9 @@ class Browse extends Component {
 			<div>
 				<Nav user={this.state.user} />
 				<div className="container">
-					<div className="row">
-						<div className="col-md-6 col-md-offset-3 well">
-							<form className="search-form">
-								<input name="search" autoComplete="off" type="search" placeholder="Search..." />
-								<button className="btn btn-success button" type="submit">Search</button>
-							</form>
-						</div>
-					</div>
+					<BrowseSearch 
+					handleSearch={this.handleSearch}
+					handleSubmit={this.searchSubmit} />
 
 					<BrowseMovies videos={this.state.videos} />
 				</div>
