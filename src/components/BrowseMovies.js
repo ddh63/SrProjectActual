@@ -8,6 +8,7 @@ class BrowseMovies extends Component {
 			videos: []
 		}
 		
+		// TODO: Move this up to the browse component and make this a stateless component
 		fetch('/api/getAllMovies')
       .then((response) => response.json())
       .then(result => this.setState({ videos: result }));

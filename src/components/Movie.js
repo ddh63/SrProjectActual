@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 
 import Loading from './Loading';
 import Nav from './Nav';
@@ -12,14 +13,21 @@ class Movie extends Component {
 			movie: []
 		}
 
+		let id = this.props.params.id;
+
+		// if the id in the url is missing, just take user to movie with id 1
+		if (id == undefined) {
+			id = 1;
+		}
+
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
 			.then((result) => this.setState({ user: result.user }));
 
-		fetch('/api/getSingleMovie?id='+this.props.params.id)
+		fetch('/api/getSingleMovie?id='+id)
 			.then((response) => response.json())
 			.then((result) => this.setState({ movie: result, loaded: true }));
-
+			
 	}
 
 	render() {
