@@ -7,25 +7,107 @@ class Login extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: null
+			usercheck: null,
+			user: '',
+			email: '',
+			pass: '',
+			confirmpass: ''
 		}
 
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
 			.then((result) => { 
-				this.setState({ user: result.user }); 
-				if (this.state.user != null)
+				this.setState({ usercheck: result.user }); 
+				if (this.state.usercheck != null)
 					browserHistory.push('/'); 
 			});
-	
-		
+
+		this.handleUsername = this.handleUsername.bind(this);
+		this.handleEmail = this.handleEmail.bind(this);
+		this.handlePassword = this.handlePassword.bind(this);
+		this.handleConfirmPass = this.handleConfirmPass.bind(this);
+
+		this.loginSubmit = this.loginSubmit.bind(this);
+		this.registerSubmit = this.registerSubmit.bind(this);
+	}
+
+	handleUsername(e) {
+		this.setState({ user: e.target.value });
+	}
+
+	handleEmail(e) {
+		this.setState({ email: e.target.value });
+	}
+
+	handlePassword(e) {
+		this.setState({ pass: e.target.value });
+	}
+	handleConfirmPass(e) {
+		this.setState({ confirmpass: e.target.value });
+	}
+
+	loginSubmit(e) {
+		e.preventDefault();
+
+		var data = {
+			user: this.state.user,
+			pass: this.state.pass
+		};
+
+		$.ajax({
+			type: 'POST',
+			url: '/api/login',
+			data: data
+		})
+		.done((data) => {
+			if (data == '')
+				browserHistory.push('/');
+			else
+				$('#fail-message').html(data);
+		})
+		.fail((jqXhr) => {
+			console.log("AJAX failure");
+		})
+	}
+
+	registerSubmit(e) {
+		e.preventDefault();
+
+		var data = {
+			user: this.state.user,
+			email: this.state.email,
+			pass: this.state.pass,
+			confirmpass: this.state.confirmpass
+		};
+
+		$.ajax({
+			type: 'POST',
+			url: '/api/register',
+			data: data
+		})
+		.done((data) => {
+				if (data == '')
+					browserHistory.push('/');
+				else
+					$('#fail-message').html(data);
+		})
+		.fail((jqXhr) => {
+			console.log("AJAX failure");
+		})
 	}
 
 	render() {
 		return (
 			<div>
-				<Nav user={this.state.user} />
-				<FormContainer value={this.props.route.path} />
+				<Nav user={this.state.usercheck} />
+				<FormContainer 
+					value={this.props.route.path} 
+					userField={this.handleUsername}
+					emailField={this.handleEmail}
+					passField={this.handlePassword}
+					confirmpassField={this.handleConfirmPass}
+					loginSubmit={this.loginSubmit}
+					registerSubmit={this.registerSubmit} />
 			</div>
 		);
 	}

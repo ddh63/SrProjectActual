@@ -21,7 +21,13 @@ class FormContainer extends Component {
 								<div className="panel-body">
 									<div className="row">
 										<div className="col-lg-12">
-											<LoginForm value={this.props.value} />
+											<LoginForm value={this.props.value}
+												userField={this.props.userField}
+												emailField={this.props.emailField}
+												passField={this.props.passField}
+												confirmpassField={this.props.confirmpassField}
+												loginSubmit={this.props.loginSubmit}
+												registerSubmit={this.props.registerSubmit} />
 										</div>
 									</div>
 								</div>

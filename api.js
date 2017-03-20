@@ -15,7 +15,6 @@ module.exports = function(app, pool) {
 	app.post('/api/login', function(req, res) {
 		var user = req.body.user;
 		var pass = req.body.pass;
-
 		pool.getConnection(function(err, conn) {
 			if (err) throw err;
 
