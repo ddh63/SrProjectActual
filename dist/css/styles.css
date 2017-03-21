@@ -54,6 +54,17 @@ a {
 	border-radius: 0;
 }
 
+.new-release-banner {
+	overflow: hidden;
+	background-color: #222;
+	border-top: 1px solid #101010;
+	border-bottom: 1px solid #101010;
+}
+
+.new-release-banner>h1 {
+	margin-bottom: 20px;
+}
+
 /*******************
 	Login/Register
  *******************/
@@ -152,14 +163,6 @@ a {
 
 .video img {
 	width: 100%;
-	opacity: 1;
-	-webkit-transition: opacity 0.5s ease-in-out;
-	-moz-transition: opacity 0.5s ease-in-out;
-	transition: opacity 0.5s ease-in-out;
-}
-
-.video img:hover {
-	opacity: 0.9;
 }
 
 .video-title {
@@ -169,7 +172,7 @@ a {
 	transition: all 0.1s ease-in-out;
 }
 
-.video-title:hover {
+.video:hover .video-title {
 	color: #5cb85c;
 }
 

@@ -112,6 +112,16 @@ module.exports = function(app, pool) {
 			res.json({'user': null});
 	});
 
+	app.post('/api/getNewestReleases', function(req, res) {
+		pool.getConnection(function(err, conn) {
+			conn.query('select * from movies order by id desc limit 2', function(err, result) {
+				if (err) throw err;
+				res.json(result);
+			});
+			conn.release();
+		});
+	});
+
 	app.get('/api/getAllMovies', function(req, res) {
 	  pool.getConnection(function(err, conn) {
 	    conn.query('select * from movies', function(err, result) {
