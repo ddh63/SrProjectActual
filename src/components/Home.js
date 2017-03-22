@@ -19,10 +19,16 @@ class Home extends Component {
 			.then((response) => response.json())
 			.then((result) => this.setState({ user: result.user, loaded: true }));
 
+		this.makeAjaxCall(this.state.releasetype);
+
+		this.handleButtonClick = this.handleButtonClick.bind(this);
+	}
+
+	makeAjaxCall(releasetype) {
 		$.ajax({
 			type: 'POST',
 			url: '/api/getNewestReleases',
-			data: { releasetype: this.state.releasetype }
+			data: { releasetype: releasetype }
 		})
 		.done((data) => {
 			this.setState({ videos: data });
@@ -30,8 +36,18 @@ class Home extends Component {
 		.fail((jqXhr) => {
 			console.log("AJAX failure");
 		});
+	}
 
-		this.handleButtonClick = this.handleButtonClick.bind(this);
+	addRemoveClass(buttonList, targetItem) {
+		buttonList.forEach((button) => {
+			if (button.classList.contains('btn-success')) {
+				button.classList.remove('btn-success');
+				button.classList.add('btn.default');
+			}
+		});
+
+		targetItem.classList.remove('btn-default');
+		targetItem.classList.add('btn-success');
 	}
 
 	handleButtonClick(e) {
@@ -42,44 +58,16 @@ class Home extends Component {
 		if (e.target.id == 'movie-button' && this.state.releasetype != 'movies') {
 			nextState = 'movies';
 			nextStateSet = true;
-
-			buttons.forEach((button) => {
-				if (button.classList.contains('btn-success')) {
-					button.classList.remove('btn-success');
-					button.classList.add('btn.default');
-				}
-			});
-
-			e.target.classList.remove('btn-default');
-			e.target.classList.add('btn-success');
+			this.addRemoveClass(buttons, e.target);			
 		}
 		else if (e.target.id == 'tv-button' && this.state.releasetype != 'tv') {
 			nextState = 'tv';
 			nextStateSet = true;
-
-			buttons.forEach((button) => {
-				if (button.classList.contains('btn-success')) {
-					button.classList.remove('btn-success');
-					button.classList.add('btn.default');
-				}
-			});
-			
-			e.target.classList.remove('btn-default');
-			e.target.classList.add('btn-success');
+			this.addRemoveClass(buttons, e.target);
 		}
 
 		if (nextStateSet) {
-			$.ajax({
-				type: 'POST',
-				url: '/api/getNewestReleases',
-				data: { releasetype: nextState }
-			})
-			.done((data) => {
-				this.setState({ videos: data });
-			})
-			.fail((jqXhr) => {
-				console.log("AJAX failure");
-			});
+			this.makeAjaxCall(nextState);
 		}
 
 		this.setState({ releasetype: nextState });
