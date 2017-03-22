@@ -11,6 +11,7 @@ class Home extends Component {
 		this.state = {
 			user: null,
 			loaded: false,
+			releasetype: 'movies',
 			videos: []
 		}
 
@@ -21,15 +22,67 @@ class Home extends Component {
 		$.ajax({
 			type: 'POST',
 			url: '/api/getNewestReleases',
+			data: { releasetype: this.state.releasetype }
 		})
 		.done((data) => {
 			this.setState({ videos: data });
-			console.log(this.state.videos);
 		})
 		.fail((jqXhr) => {
 			console.log("AJAX failure");
-		})
+		});
 
+		this.handleButtonClick = this.handleButtonClick.bind(this);
+	}
+
+	handleButtonClick(e) {
+		var nextState;
+		var nextStateSet = false;
+		var buttons = document.querySelectorAll('#release-button-container button');
+		
+		if (e.target.id == 'movie-button' && this.state.releasetype != 'movies') {
+			nextState = 'movies';
+			nextStateSet = true;
+
+			buttons.forEach((button) => {
+				if (button.classList.contains('btn-success')) {
+					button.classList.remove('btn-success');
+					button.classList.add('btn.default');
+				}
+			});
+
+			e.target.classList.remove('btn-default');
+			e.target.classList.add('btn-success');
+		}
+		else if (e.target.id == 'tv-button' && this.state.releasetype != 'tv') {
+			nextState = 'tv';
+			nextStateSet = true;
+
+			buttons.forEach((button) => {
+				if (button.classList.contains('btn-success')) {
+					button.classList.remove('btn-success');
+					button.classList.add('btn.default');
+				}
+			});
+			
+			e.target.classList.remove('btn-default');
+			e.target.classList.add('btn-success');
+		}
+
+		if (nextStateSet) {
+			$.ajax({
+				type: 'POST',
+				url: '/api/getNewestReleases',
+				data: { releasetype: nextState }
+			})
+			.done((data) => {
+				this.setState({ videos: data });
+			})
+			.fail((jqXhr) => {
+				console.log("AJAX failure");
+			});
+		}
+
+		this.setState({ releasetype: nextState });
 	}
 
   render() {
@@ -38,7 +91,9 @@ class Home extends Component {
       <div>
       	<Nav user={this.state.user} />
       	<HomeLanding user={this.state.user} />
-      	<NewReleases videos={this.state.videos} />
+      	<NewReleases 
+      		videos={this.state.videos}
+      		handleButtonClick={this.handleButtonClick} />
       </div>
     );
   }

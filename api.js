@@ -114,7 +114,15 @@ module.exports = function(app, pool) {
 
 	app.post('/api/getNewestReleases', function(req, res) {
 		pool.getConnection(function(err, conn) {
-			conn.query('select * from movies order by id desc limit 2', function(err, result) {
+			var query;
+
+			// Change these when tv table is made and movie table is filled up more
+			if (req.body.releasetype == 'movies')
+				query = 'select * from movies order by id desc limit 2';
+			else if (req.body.releasetype == 'tv')
+				query = 'select * from movies limit 2';
+
+			conn.query(query, function(err, result) {
 				if (err) throw err;
 				res.json(result);
 			});
