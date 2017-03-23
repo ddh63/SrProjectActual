@@ -53,7 +53,6 @@ class Browse extends Component {
 		})
 	}
 
-	// TODO: Make the search into a stateless component controlled by this component
 	render() {
 		if (!this.state.loaded) return <Loading />;
 		return (
