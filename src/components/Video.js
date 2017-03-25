@@ -14,13 +14,56 @@ class Video extends Component {
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
 			.then((result) => this.setState({ user: result.user, loaded: true }));
-
-		this.togglePlay = this.togglePlay.bind(this);
 	}
+
+	componentDidMount() {
+		document.addEventListener("keydown", this.stopSpacebarScroll);
+    document.addEventListener("keyup", this.togglePlayOnSpace);
+   }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.stopSpacebarScroll);
+    document.removeEventListener("keyup", this.togglePlayOnSpace);
+  }
+
+  stopSpacebarScroll(e) {
+  	if (e.keyCode == 32 && e.target == document.body) {
+			e.preventDefault();
+		}
+  }
 
 	togglePlay() {
 		let video = document.querySelector('.html-video');
 		video.paused ? video.play() : video.pause();
+	}
+
+	// togglePlay currently copy/pasted into this 
+	// because it doesn't recognize togglePlay function for some reason
+	togglePlayOnSpace(e) {
+		if (e.keyCode == 32) {
+			e.preventDefault();
+			let video = document.querySelector('.html-video');
+			video.paused ? video.play() : video.pause();
+		}
+	}
+
+	updateButton() {
+		let toggle = document.querySelector('.toggle');
+		let video = document.querySelector('.html-video');
+		toggle.innerHTML = video.paused ? '<i class="icon-play"></i>' : '<i class="icon-pause"></i>';
+	}
+
+	skip() {
+		let video = document.querySelector('.html-video');
+		// Need to change "this" to button pressed
+		video.currentTime += parseFloat(this.dataset.skip);
+	}
+
+	handleProgress() {
+		let video = document.querySelector('.html-video');
+		let progressBar = document.querySelector('.progress-filled');
+		const percent = (video.currentTime / video.duration) * 100;
+		progressBar.style.flexBasis = `${percent}%`;
 	}
 
 	screenSizeToggle(e) {
@@ -64,23 +107,30 @@ class Video extends Component {
 					<div className="player">
 						<video className="video-player html-video" 
 							src="https://media.w3.org/2010/05/sintel/trailer.mp4"
-							onClick={this.togglePlay}></video>
+							onClick={this.togglePlay}
+							onPlay={this.updateButton}
+							onPause={this.updateButton}
+							onTimeUpdate={this.handleProgress}></video>
 
 						<div className="player-controls">
 							<div className="progress-bar">
 								<div className="progress-filled"></div>
 							</div>
-							<button className="player-button toggle" title="Toggle Play">
+							<button className="player-button toggle" 
+								title="Toggle Play"
+								onClick={this.togglePlay}>
 								<i className="icon-play"></i>
 							</button>
 							<button className="player-button volume-toggle">
 								<i className="icon-volume-up"></i>
 							</button>
 							<input type="range" name="volume" className="player-slider" min="0" max="1" step="0.05" defaultValue="1" />
-							<button data-skip="-10" className="player-button">
+							<button data-skip="-10" className="player-button"
+								onClick={this.skip}>
 								<i className="icon-step-backward"></i>
 							</button>
-							<button data-skip="10" className="player-button">
+							<button data-skip="10" className="player-button"
+								onClick={this.skip}>
 								<i className="icon-step-forward"></i>
 							</button>
 							<button className="player-button screen-toggle">
