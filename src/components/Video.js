@@ -14,30 +14,12 @@ class Video extends Component {
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
 			.then((result) => this.setState({ user: result.user, loaded: true }));
-	}
 
-	checkDoubleClick() {
-		let clicks = 0,
-      	timeout;
-	  
-	 		return (() => {
-	    clicks++;
-	    if (clicks == 1) {
-	      timeout = setTimeout(() => {
-	        this.togglePlay();
-	        clicks = 0;
-	     	}, 250);
-	    } 
-	    else {
-	      clearTimeout(timeout);
-	      this.screenSizeToggle();
-	      clicks = 0;
-	    }
-	  });
+		this.togglePlay = this.togglePlay.bind(this);
 	}
 
 	togglePlay() {
-		let video = document.querySelector('.video');
+		let video = document.querySelector('.html-video');
 		video.paused ? video.play() : video.pause();
 	}
 
@@ -80,9 +62,9 @@ class Video extends Component {
 				<Nav user={this.state.user} />
 				<div className="player-container">
 					<div className="player">
-						<video className="video-player video" 
+						<video className="video-player html-video" 
 							src="https://media.w3.org/2010/05/sintel/trailer.mp4"
-							onClick={this.checkDoubleClick}></video>
+							onClick={this.togglePlay}></video>
 
 						<div className="player-controls">
 							<div className="progress-bar">
