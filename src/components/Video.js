@@ -9,7 +9,9 @@ class Video extends Component {
 		this.state = {
 			user: null,
 			loaded: false,
-			volumeLevel: 1
+			volumeLevel: 1,
+			mousedown: false,
+			fullscreen: false
 		}
 
 		fetch('/api/isLoggedIn')
@@ -20,11 +22,19 @@ class Video extends Component {
 	componentDidMount() {
 		document.addEventListener("keydown", this.stopSpacebarScroll);
     document.addEventListener("keyup", this.togglePlayOnSpace);
+    document.addEventListener('webkitfullscreenchange', this.exitHandler.bind(this));
+		document.addEventListener('mozfullscreenchange', this.exitHandler.bind(this));
+		document.addEventListener('fullscreenchange', this.exitHandler.bind(this));
+		document.addEventListener('MSFullscreenChange', this.exitHandler.bind(this));
    }
 
   componentWillUnmount() {
     document.removeEventListener("keydown", this.stopSpacebarScroll);
     document.removeEventListener("keyup", this.togglePlayOnSpace);
+    document.removeEventListener('webkitfullscreenchange', this.exitHandler.bind(this));
+		document.removeEventListener('mozfullscreenchange', this.exitHandler.bind(this));
+		document.removeEventListener('fullscreenchange', this.exitHandler.bind(this));
+		document.removeEventListener('MSFullscreenChange', this.exitHandler.bind(this));
   }
 
   stopSpacebarScroll(e) {
@@ -100,12 +110,34 @@ class Video extends Component {
 		progressBar.style.flexBasis = `${percent}%`;
 	}
 
+	scrub(e) {
+		let video = document.querySelector('.html-video');
+		let progress = document.querySelector('.progress-bar');
+		const scrubTime = (e.nativeEvent.offsetX / progress.offsetWidth) * video.duration;
+		video.currentTime = scrubTime;
+	}
+
+	scrubCheck(e) {
+		if (this.state.mousedown)
+			this.scrub(e);
+	}
+
+	scrubSet() {
+		this.setState({ mousedown: true });
+	}
+
+	scrubUnset() {
+		this.setState({ mousedown: false });
+	}
+
 	screenSizeToggle(e) {
-		if (e && e.offsetX == 0 && e.offsetY == 0)
+		let video = document.querySelector('.html-video');
+		let screenSizeButton = document.querySelector('.screen-toggle');
+		if (e && e.nativeEvent.offsetX == 0 && e.nativeEvent.offsetY == 0)
 			return;
 
 		// Remove fullscreen
-		if (fullscreen) {
+		if (this.state.fullscreen) {
 			if (document.exitFullscreen)
 				document.exitFullscreen();
 			else if (document.webkitExitFullscreen)
@@ -132,6 +164,16 @@ class Video extends Component {
 		}
 	}
 
+	exitHandler() {
+		let screenSizeButton = document.querySelector('.screen-toggle');
+		if (this.state.fullscreen) {
+			screenSizeButton.innerHTML = '<i class="icon-resize-full"></i>';
+			this.setState({ fullscreen: false });
+	  }
+	  else
+	  	this.setState({ fullscreen: true });
+	}
+
 	render() {
 		if (!this.state.loaded) return <Loading />;
 		return (
@@ -147,7 +189,11 @@ class Video extends Component {
 							onTimeUpdate={this.handleProgress}></video>
 
 						<div className="player-controls">
-							<div className="progress-bar">
+							<div className="progress-bar"
+								onClick={this.scrub}
+								onMouseMove={this.scrubCheck.bind(this)}
+								onMouseDown={this.scrubSet.bind(this)}
+								onMouseUp={this.scrubUnset.bind(this)}>
 								<div className="progress-filled"></div>
 							</div>
 							<button className="player-button toggle" 
@@ -169,7 +215,8 @@ class Video extends Component {
 								onClick={this.skip.bind(null, 10)}>
 								<i className="icon-step-forward"></i>
 							</button>
-							<button className="player-button screen-toggle">
+							<button className="player-button screen-toggle"
+								onClick={this.screenSizeToggle.bind(this)}>
 								<i className="icon-resize-full"></i>
 							</button>
 						</div>
