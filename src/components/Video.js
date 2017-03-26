@@ -8,7 +8,8 @@ class Video extends Component {
 		super(props);
 		this.state = {
 			user: null,
-			loaded: false
+			loaded: false,
+			volumeLevel: 1
 		}
 
 		fetch('/api/isLoggedIn')
@@ -53,10 +54,43 @@ class Video extends Component {
 		toggle.innerHTML = video.paused ? '<i class="icon-play"></i>' : '<i class="icon-pause"></i>';
 	}
 
-	skip() {
+	skip(i) {
 		let video = document.querySelector('.html-video');
-		// Need to change "this" to button pressed
-		video.currentTime += parseFloat(this.dataset.skip);
+		video.currentTime += parseFloat(i);
+	}
+
+	handleVolumeUpdate(e) {
+		let video = document.querySelector('.html-video');
+		video['volume'] = e.target.value;
+		this.setState({ volumeLevel: video['volume'] });
+		this.changeVolumeIcon(video['volume']);
+	}
+
+	volumeToggle() {
+		let video = document.querySelector('.html-video');
+		let volume = document.querySelector('.player-slider');
+		let volumeButton = document.querySelector('.volume-toggle');
+		if (video['volume'] > 0) {
+			video['volume'] = 0;
+			volume.value = 0;
+			volumeButton.innerHTML = "<i class='icon-volume-off'></i>";
+		}
+		else {
+			video['volume'] = this.state.volumeLevel;
+			volume.value = video['volume'];
+			this.changeVolumeIcon(video['volume']);
+		}
+	}
+
+	changeVolumeIcon(vol) {
+		let volume = document.querySelector('.player-slider');
+		let volumeButton = document.querySelector('.volume-toggle');
+		if (vol == 0)
+			volumeButton.innerHTML = "<i class='icon-volume-off'></i>";
+		else if (vol < 0.8)
+			volumeButton.innerHTML = "<i class='icon-volume-down'></i>";
+		else
+			volumeButton.innerHTML = "<i class='icon-volume-up'></i>";
 	}
 
 	handleProgress() {
@@ -121,16 +155,18 @@ class Video extends Component {
 								onClick={this.togglePlay}>
 								<i className="icon-play"></i>
 							</button>
-							<button className="player-button volume-toggle">
+							<button className="player-button volume-toggle"
+								onClick={this.volumeToggle.bind(this)}>
 								<i className="icon-volume-up"></i>
 							</button>
-							<input type="range" name="volume" className="player-slider" min="0" max="1" step="0.05" defaultValue="1" />
-							<button data-skip="-10" className="player-button"
-								onClick={this.skip}>
+							<input type="range" name="volume" className="player-slider" min="0" max="1" step="0.05" defaultValue="1" 
+								onChange={this.handleVolumeUpdate.bind(this)} />
+							<button className="player-button"
+								onClick={this.skip.bind(null, -10)}>
 								<i className="icon-step-backward"></i>
 							</button>
-							<button data-skip="10" className="player-button"
-								onClick={this.skip}>
+							<button className="player-button"
+								onClick={this.skip.bind(null, 10)}>
 								<i className="icon-step-forward"></i>
 							</button>
 							<button className="player-button screen-toggle">
