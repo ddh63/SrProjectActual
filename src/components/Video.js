@@ -26,7 +26,7 @@ class Video extends Component {
 		document.addEventListener('mozfullscreenchange', this.exitHandler.bind(this));
 		document.addEventListener('fullscreenchange', this.exitHandler.bind(this));
 		document.addEventListener('MSFullscreenChange', this.exitHandler.bind(this));
-   }
+  }
 
   componentWillUnmount() {
     document.removeEventListener("keydown", this.stopSpacebarScroll);
@@ -106,8 +106,21 @@ class Video extends Component {
 	handleProgress() {
 		let video = document.querySelector('.html-video');
 		let progressBar = document.querySelector('.progress-filled');
+		let current = document.querySelector('.current');
+		let end = document.querySelector('.end');
 		const percent = (video.currentTime / video.duration) * 100;
 		progressBar.style.flexBasis = `${percent}%`;
+
+		let currentMinutes = Math.floor(video.currentTime / 60);
+		let currentSeconds = Math.floor(video.currentTime - currentMinutes * 60);
+		let durationMinutes = Math.floor(video.duration / 60);
+		let durationSeconds = Math.ceil(video.duration - durationMinutes * 60);
+		if (currentSeconds < 10)
+			currentSeconds = "0" + currentSeconds;
+		if (durationSeconds < 10)
+			durationSeconds = "0" + durationSeconds;
+		current.innerHTML = currentMinutes + ":" + currentSeconds;
+		end.innerHTML = durationMinutes + ":" + durationSeconds;
 	}
 
 	scrub(e) {
@@ -183,6 +196,7 @@ class Video extends Component {
 					<div className="player">
 						<video className="video-player html-video" 
 							src="https://media.w3.org/2010/05/sintel/trailer.mp4"
+							onLoadedData={this.handleProgress}
 							onClick={this.togglePlay}
 							onPlay={this.updateButton}
 							onPause={this.updateButton}
@@ -201,6 +215,9 @@ class Video extends Component {
 								onClick={this.togglePlay}>
 								<i className="icon-play"></i>
 							</button>
+							<span className="time current"></span>
+							<span className="slash">/</span>
+							<span className="time end"></span>
 							<button className="player-button volume-toggle"
 								onClick={this.volumeToggle.bind(this)}>
 								<i className="icon-volume-up"></i>

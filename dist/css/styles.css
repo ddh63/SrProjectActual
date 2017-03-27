@@ -237,6 +237,26 @@ video::-webkit-media-controls-enclosure {
 	width: 100%;
 }
 
+.time,
+.slash {
+	margin: 5px 0;
+	font-size: 15px;
+	color: white;
+	text-align: center;
+	-webkit-user-select: none;
+ 	-moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.time {
+	max-width: 50px;
+}
+
+.slash {
+	max-width: 10px;
+}
+
 .player-button {
 	background: none;
 	border: 0;
@@ -261,7 +281,7 @@ video::-webkit-media-controls-enclosure {
 	left: 0;
 	width: 100%;
 	flex-wrap: wrap;
-	transform: translateY(100%) translateY(-5px);
+	transform: translateY(100%) translateY(-3px);
 	transition: all .3s;
 }
 
@@ -270,7 +290,7 @@ video::-webkit-media-controls-enclosure {
 }
 
 .player:hover .progress-bar {
-	height: 15px;
+	height: 6px;
 }
 
 .player-controls > * {
@@ -282,7 +302,7 @@ video::-webkit-media-controls-enclosure {
 	position: relative;
 	display: flex;
 	flex-basis: 100%;
-	height: 5px;
+	height: 3px;
 	transition: height 0.3s;
 	background: rgba(0, 0, 0, 0.5);
 	cursor: pointer;
