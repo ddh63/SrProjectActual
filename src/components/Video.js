@@ -20,7 +20,7 @@ class Video extends Component {
 	}
 
 	componentDidMount() {
-		document.addEventListener("keydown", this.stopSpacebarScroll);
+		document.addEventListener("keydown", this.handleKeyPresses);
     document.addEventListener("keyup", this.togglePlayOnSpace);
     document.addEventListener('webkitfullscreenchange', this.exitHandler.bind(this));
 		document.addEventListener('mozfullscreenchange', this.exitHandler.bind(this));
@@ -29,7 +29,7 @@ class Video extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.stopSpacebarScroll);
+    document.removeEventListener("keydown", this.handleKeyPresses);
     document.removeEventListener("keyup", this.togglePlayOnSpace);
     document.removeEventListener('webkitfullscreenchange', this.exitHandler.bind(this));
 		document.removeEventListener('mozfullscreenchange', this.exitHandler.bind(this));
@@ -37,9 +37,18 @@ class Video extends Component {
 		document.removeEventListener('MSFullscreenChange', this.exitHandler.bind(this));
   }
 
-  stopSpacebarScroll(e) {
+  handleKeyPresses(e) {
+  	// Stops spacebar press from scrolling down
   	if (e.keyCode == 32 && e.target == document.body) {
 			e.preventDefault();
+		}
+		// Sets video forward or backward 10 seconds based on arrow key press
+		if (e.keyCode == 37 || e.keyCode == 39) {
+			let video = document.querySelector('.html-video');
+			if (e.keyCode == 37)
+				video.currentTime += parseFloat(-10);
+			else
+				video.currentTime += parseFloat(10);
 		}
   }
 
