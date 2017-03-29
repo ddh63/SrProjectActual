@@ -130,6 +130,16 @@ module.exports = function(app, pool) {
 		});
 	});
 
+	app.get('/api/getGenres', function(req, res) {
+		pool.getConnection(function(err, conn) {
+			conn.query('select * from genres', function(err, result) {
+				if (err) throw err;
+				res.json(result);
+			});
+			conn.release();
+		});
+	});
+
 	app.get('/api/getAllMovies', function(req, res) {
 	  pool.getConnection(function(err, conn) {
 	    conn.query('select * from movies', function(err, result) {

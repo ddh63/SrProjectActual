@@ -15,7 +15,7 @@ const Routes = (
 		<Route path="register" component={Login} />
 		<Route path="browse" component={Browse} />
 		<Route path="movie(/:id)" component={Movie} />
-		<Route path="video" component={Video} />
+		<Route path="video(/:type/:id)" component={Video} />
 		<Route path="*" component={NotFound} />
 	</Router>
 );

@@ -10,24 +10,28 @@ class Movie extends Component {
 		this.state = {
 			user: null,
 			loaded: false,
+			id: this.props.params.id,
 			movie: []
 		}
+	}
 
-		let id = this.props.params.id;
-
-		// if the id in the url is missing, just take user to movie with id 1
-		if (id == undefined) {
-			id = 1;
+	componentWillMount() {
+		if (this.state.id == undefined) {
+			this.setState({ id: 1 });
+			this.fetchMovie(1);
 		}
+		else
+			this.fetchMovie(this.state.id);
 
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
-			.then((result) => this.setState({ user: result.user }));
+			.then((result) => this.setState({ user: result.user }));	
+	}
 
+	fetchMovie(id) {
 		fetch('/api/getSingleMovie?id='+id)
 			.then((response) => response.json())
 			.then((result) => this.setState({ movie: result, loaded: true }));
-			
 	}
 
 	render() {
@@ -43,6 +47,12 @@ class Movie extends Component {
 						</div>
 						<div className="col-sm-8">
 							<h1 className="text-center site"><strong>{this.state.movie[0].title}</strong> ({this.state.movie[0].year})</h1>
+						</div>
+					</div>
+
+					<div className="row">
+						<div className="col-xs-12 buttons text-center">
+							<a href={"/video/1/"+this.state.id} className="btn btn-success">Watch</a>
 						</div>
 					</div>
 				</div>

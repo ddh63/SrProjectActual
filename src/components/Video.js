@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Nav from './Nav';
+import { browserHistory } from 'react-router';
 import Loading from './Loading';
 
 class Video extends Component {
@@ -13,10 +14,16 @@ class Video extends Component {
 			mousedown: false,
 			fullscreen: false
 		}
+	}
 
-		fetch('/api/isLoggedIn')
-			.then((response) => response.json())
-			.then((result) => this.setState({ user: result.user, loaded: true }));
+	componentWillMount() {
+		if (this.props.params.type == undefined || this.props.params.id == undefined)
+			browserHistory.push('/browse');
+		else {
+			fetch('/api/isLoggedIn')
+				.then((response) => response.json())
+				.then((result) => this.setState({ user: result.user, loaded: true }));
+		}
 	}
 
 	componentDidMount() {

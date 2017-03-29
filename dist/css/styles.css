@@ -192,6 +192,33 @@ a {
 	color: #777;
 }
 
+.select-search-container,
+.select-search {
+	width: 130px;
+}
+
+.select-search-container {
+	display: inline-block;
+	margin: 15px 20px 0 0 !important;
+}
+
+.select-search {
+	margin: 0;
+	height: 40px;
+	color: #333;
+}
+
+.search-options-container {
+	text-align: center;
+    position: relative;
+}
+
+.select-search-container {
+	position: relative;
+	margin: 10px auto;
+	display: inline-block;
+}
+
 /*******************
 	Video Description Pages
  *******************/

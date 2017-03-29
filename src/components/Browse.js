@@ -12,6 +12,7 @@ class Browse extends Component {
 			user: null,
 			loaded: false,
 			search: '',
+			genres: [],
 			videos: []
 		};
 
@@ -20,6 +21,10 @@ class Browse extends Component {
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
 			.then((result) => this.setState({ user: result.user, loaded: true }));
+
+		fetch('/api/getGenres')
+			.then((response) => response.json())
+			.then((result) => this.setState({ genres: result }));
 
 		fetch('/api/getAllMovies')
       .then((response) => response.json())
@@ -61,7 +66,8 @@ class Browse extends Component {
 				<div className="container">
 					<BrowseSearch 
 					handleSearch={this.handleSearch}
-					handleSubmit={this.searchSubmit} />
+					handleSubmit={this.searchSubmit}
+					genres={this.state.genres} />
 
 					<BrowseMovies videos={this.state.videos} />
 				</div>
