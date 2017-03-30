@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 
 import Nav from './Nav';
-import { browserHistory } from 'react-router';
-import Loading from './Loading';
+import Loading from './Loading'
+import VideoPlayer from './VideoPlayer';
 
 class Video extends Component {
 	constructor(props) {
@@ -209,51 +210,18 @@ class Video extends Component {
 			<div>
 				<Nav user={this.state.user} />
 				<div className="player-container">
-					<div className="player">
-						<video className="video-player html-video" 
-							src="https://media.w3.org/2010/05/sintel/trailer.mp4"
-							onLoadedData={this.handleProgress}
-							onClick={this.togglePlay}
-							onPlay={this.updateButton}
-							onPause={this.updateButton}
-							onTimeUpdate={this.handleProgress}></video>
-
-						<div className="player-controls">
-							<div className="progress-bar"
-								onClick={this.scrub}
-								onMouseMove={this.scrubCheck.bind(this)}
-								onMouseDown={this.scrubSet.bind(this)}
-								onMouseUp={this.scrubUnset.bind(this)}>
-								<div className="progress-filled"></div>
-							</div>
-							<button className="player-button toggle" 
-								title="Toggle Play"
-								onClick={this.togglePlay}>
-								<i className="icon-play"></i>
-							</button>
-							<span className="time current"></span>
-							<span className="slash">/</span>
-							<span className="time end"></span>
-							<button className="player-button volume-toggle"
-								onClick={this.volumeToggle.bind(this)}>
-								<i className="icon-volume-up"></i>
-							</button>
-							<input type="range" name="volume" className="player-slider" min="0" max="1" step="0.05" defaultValue="1" 
-								onChange={this.handleVolumeUpdate.bind(this)} />
-							<button className="player-button"
-								onClick={this.skip.bind(null, -10)}>
-								<i className="icon-step-backward"></i>
-							</button>
-							<button className="player-button"
-								onClick={this.skip.bind(null, 10)}>
-								<i className="icon-step-forward"></i>
-							</button>
-							<button className="player-button screen-toggle"
-								onClick={this.screenSizeToggle.bind(this)}>
-								<i className="icon-resize-full"></i>
-							</button>
-						</div>
-					</div>
+					<VideoPlayer 
+						handleProgress={this.handleProgress}
+						togglePlay={this.togglePlay}
+						updateButton={this.updateButton}
+						scrub={this.scrub}
+						scrubCheck={this.scrubCheck.bind(this)}
+						scrubSet={this.scrubSet.bind(this)}
+						scrubUnset={this.scrubUnset.bind(this)}
+						volumeToggle={this.volumeToggle.bind(this)}
+						handleVolumeUpdate={this.handleVolumeUpdate.bind(this)}
+						skip={this.skip}
+						screenSizeToggle={this.screenSizeToggle.bind(this)} />
 				</div>
 			</div>
 		);
