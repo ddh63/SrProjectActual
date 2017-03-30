@@ -162,20 +162,30 @@ module.exports = function(app, pool) {
 	
 	app.post('/api/getSearch', function(req, res) {
 		var searchValue = req.body.search;
-		// TODO: Implement support for sorting by genre
 		var genre = req.body.genre;
 		var order = req.body.order;
 
+		var query = 'select * from movies';
+
 		var orderCon = '';
+
+		if (genre != '0')
+			query += ' left join moviegenre on movies.id = moviegenre.movie_id left join genres on moviegenre.genre_id = genres.id';
+
 		switch (order) {
-			case '1': var orderCon = 'order by year desc'; break;
-			case '2': var orderCon = 'order by id desc'; break;
-			case '3': var orderCon = 'order by id asc'; break;
-			default: var orderCon = 'order by year desc'; break;
+			case '1': orderCon = ' order by year desc'; break;
+			case '2': orderCon = ' order by id desc'; break;
+			case '3': orderCon = ' order by id asc'; break;
+			default: orderCon = ' order by year desc';
 		}
 
 		pool.getConnection(function(err, conn) {
-			conn.query('select * from movies where title like ' + conn.escape('%'+searchValue+'%') + ' ' + orderCon, function(err, result) {
+			query += ' where title like ' + conn.escape('%'+searchValue+'%');
+			if (genre != '0')
+				query += ' and genre_id = ' + conn.escape(genre);
+			query += orderCon;
+
+			conn.query(query, function(err, result) {
 				if (err) throw err;
 				res.json(result);
 			});
