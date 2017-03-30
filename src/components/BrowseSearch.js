@@ -17,9 +17,19 @@ const BrowseSearch = (props) => {
 					<button className="btn btn-success button" type="submit">Search</button>
 
 					<div className="select-search-container">
-						<select name="genre" className="select-search">
-							<option value="0">Genre</option>
+						<p className="select-desc">Genre:</p>
+						<select name="genre" className="select-search" onChange={props.handleGenre}>
+							<option value="0">All</option>
 							{genres}
+						</select>
+					</div>
+
+					<div className="select-search-container">
+						<p className="select-desc">Order:</p>
+						<select name="order" className="select-search" onChange={props.handleOrder}>
+							<option value="1">Year</option>
+							<option value="2">Newest</option>
+							<option value="3">Oldest</option>							
 						</select>
 					</div>
 

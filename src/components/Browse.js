@@ -12,6 +12,8 @@ class Browse extends Component {
 			user: null,
 			loaded: false,
 			search: '',
+			genre: 0,
+			order: 1,
 			genres: [],
 			videos: []
 		};
@@ -31,6 +33,8 @@ class Browse extends Component {
       .then(result => this.setState({ videos: result }));
 
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleGenre = this.handleGenre.bind(this);
+    this.handleOrder = this.handleOrder.bind(this);
 		this.searchSubmit = this.searchSubmit.bind(this);
 	}
 
@@ -38,11 +42,21 @@ class Browse extends Component {
 		this.setState({ search: e.target.value });
 	}
 
+	handleGenre(e) {
+		this.setState({ genre: e.target.value });
+	}
+
+	handleOrder(e) {
+		this.setState({ order: e.target.value });
+	}
+
 	searchSubmit(e) {
 		e.preventDefault();
 
 		var data = {
-			'search': this.state.search
+			'search': this.state.search,
+			'genre': this.state.genre,
+			'order': this.state.order
 		}
 
 		$.ajax({
@@ -67,6 +81,8 @@ class Browse extends Component {
 					<BrowseSearch 
 					handleSearch={this.handleSearch}
 					handleSubmit={this.searchSubmit}
+					handleGenre={this.handleGenre}
+					handleOrder={this.handleOrder}
 					genres={this.state.genres} />
 
 					<BrowseMovies videos={this.state.videos} />
