@@ -13,7 +13,10 @@ class Video extends Component {
 			loaded: false,
 			volumeLevel: 1,
 			mousedown: false,
-			fullscreen: false
+			fullscreen: false,
+			type: this.props.params.type,
+			id: this.props.params.id,
+			video: []
 		}
 	}
 
@@ -21,9 +24,30 @@ class Video extends Component {
 		if (this.props.params.type == undefined || this.props.params.id == undefined)
 			browserHistory.push('/browse');
 		else {
-			fetch('/api/isLoggedIn')
-				.then((response) => response.json())
-				.then((result) => this.setState({ user: result.user, loaded: true }));
+			var data = {
+				type: this.state.type,
+				id: this.state.id
+			};
+
+			$.ajax({
+				type: 'POST',
+				url: '/api/getSingleVideo',
+				data: data
+			})
+			.done((data) => {
+				if (data == '')
+					browserHistory.push('/browse');
+				else {
+					this.setState({ video: data });
+					fetch('/api/isLoggedIn')
+						.then((response) => response.json())
+						.then((result) => this.setState({ user: result.user, loaded: true }));
+				}
+			})
+			.fail((jqXhr) => {
+				console.log("AJAX failure");
+			});
+
 		}
 	}
 
@@ -209,19 +233,25 @@ class Video extends Component {
 		return (
 			<div>
 				<Nav user={this.state.user} />
-				<div className="player-container">
-					<VideoPlayer 
-						handleProgress={this.handleProgress}
-						togglePlay={this.togglePlay}
-						updateButton={this.updateButton}
-						scrub={this.scrub}
-						scrubCheck={this.scrubCheck.bind(this)}
-						scrubSet={this.scrubSet.bind(this)}
-						scrubUnset={this.scrubUnset.bind(this)}
-						volumeToggle={this.volumeToggle.bind(this)}
-						handleVolumeUpdate={this.handleVolumeUpdate.bind(this)}
-						skip={this.skip}
-						screenSizeToggle={this.screenSizeToggle.bind(this)} />
+				<div className="container well video-container">
+					<div className="player-container">
+						<VideoPlayer 
+							handleProgress={this.handleProgress}
+							togglePlay={this.togglePlay}
+							updateButton={this.updateButton}
+							scrub={this.scrub}
+							scrubCheck={this.scrubCheck.bind(this)}
+							scrubSet={this.scrubSet.bind(this)}
+							scrubUnset={this.scrubUnset.bind(this)}
+							volumeToggle={this.volumeToggle.bind(this)}
+							handleVolumeUpdate={this.handleVolumeUpdate.bind(this)}
+							skip={this.skip}
+							screenSizeToggle={this.screenSizeToggle.bind(this)} />
+					</div>
+				</div>
+				<div className="container well description-container">
+					<h1>{this.state.video[0].title}</h1>
+					<p>{this.state.video[0].year}</p>
 				</div>
 			</div>
 		);

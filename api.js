@@ -12,6 +12,7 @@ module.exports = function(app, pool) {
 	  database: 'streamingsite'
 	});
 
+	// User login
 	app.post('/api/login', function(req, res) {
 		var user = req.body.user;
 		var pass = req.body.pass;
@@ -45,6 +46,7 @@ module.exports = function(app, pool) {
 		});
 	});
 
+	// Registers a user
 	app.post('/api/register', function(req, res) {
 		var user = req.body.user;
 		var email = req.body.email;
@@ -94,6 +96,7 @@ module.exports = function(app, pool) {
 		}
 	});
 
+	// Logs user out
 	app.get('/api/logout', function(req, res) {
 		req.session.destroy(function(err) {
 			if (err)
@@ -105,6 +108,7 @@ module.exports = function(app, pool) {
 		});
 	});
 
+	// Checks if use is logged in
 	app.get('/api/isLoggedIn', function(req, res) {
 		if (typeof sess == 'object' && sess.username)
 			res.json({'user': sess.username})
@@ -130,6 +134,7 @@ module.exports = function(app, pool) {
 		});
 	});
 
+	// Gets list of genres for search on browse page
 	app.get('/api/getGenres', function(req, res) {
 		pool.getConnection(function(err, conn) {
 			conn.query('select * from genres', function(err, result) {
@@ -140,6 +145,8 @@ module.exports = function(app, pool) {
 		});
 	});
 
+	// Gets all movies and displays on browse page
+	// TODO: Get rid of this and use the '/api/getSearch' endpoint
 	app.get('/api/getAllMovies', function(req, res) {
 	  pool.getConnection(function(err, conn) {
 	    conn.query('select * from movies', function(err, result) {
@@ -150,6 +157,8 @@ module.exports = function(app, pool) {
 	  });
 	});
 
+	// Used to get info for single video page
+	// TODO: Make this work with tv shows as well
 	app.get('/api/getSingleMovie', function(req, res) {
 		pool.getConnection(function(err, conn) {
 			conn.query('select * from movies where id='+conn.escape(req.query.id), function(err, result) {
@@ -159,7 +168,34 @@ module.exports = function(app, pool) {
 			conn.release();
 		});
 	});
+
+	// Retrieves video information to be displayed on video page
+	app.post('/api/getSingleVideo', function(req, res) {
+		var type = req.body.type;
+		var id = req.body.id;
+
+		var query = '';
+
+		if (type == '1') {
+			pool.getConnection(function(err, conn) {
+				query = 'select * from movies where id = ' + conn.escape(id); 
+				conn.query(query, function(err, result) {
+					if (err) throw err;
+					if (result.length > 0)
+						res.json(result);
+					else
+						res.send('');
+				});
+				conn.release();
+			});
+		}
+		// TODO: This will be where tv shows are retrieved
+		else {
+			res.send('');
+		}
+	});
 	
+	// Gets result of search on browse page
 	app.post('/api/getSearch', function(req, res) {
 		var searchValue = req.body.search;
 		var genre = req.body.genre;

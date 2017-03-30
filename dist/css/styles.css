@@ -226,7 +226,6 @@ a {
  *******************/
 
 .player-container {
-	min-height: 100vh;
 	display:flex;
 	align-items: center;
   justify-content: center;
@@ -383,4 +382,13 @@ input[type=range]::-moz-range-thumb {
   border-radius: 15px;
   background: #cc181e;
   cursor: pointer;
+}
+
+.video-container {
+	margin-bottom: 0;
+}
+
+.description-container {
+	border-top: 0;
+	color: #eee;
 }
