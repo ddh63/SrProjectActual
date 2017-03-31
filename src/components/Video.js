@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router';
 import Nav from './Nav';
 import Loading from './Loading'
 import VideoPlayer from './VideoPlayer';
+import VideoDescription from './VideoDescription';
 
 class Video extends Component {
 	constructor(props) {
@@ -47,7 +48,6 @@ class Video extends Component {
 			.fail((jqXhr) => {
 				console.log("AJAX failure");
 			});
-
 		}
 	}
 
@@ -249,10 +249,8 @@ class Video extends Component {
 							screenSizeToggle={this.screenSizeToggle.bind(this)} />
 					</div>
 				</div>
-				<div className="container well description-container">
-					<h1>{this.state.video[0].title}</h1>
-					<p>{this.state.video[0].year}</p>
-				</div>
+				<VideoDescription
+					video={this.state.video[0]} />
 			</div>
 		);
 	}

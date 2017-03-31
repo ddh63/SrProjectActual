@@ -384,11 +384,13 @@ input[type=range]::-moz-range-thumb {
   cursor: pointer;
 }
 
-.video-container {
+.video-container,
+.description-title {
 	margin-bottom: 0;
 }
 
-.description-container {
+.description-title,
+.description {
 	border-top: 0;
 	color: #eee;
 }

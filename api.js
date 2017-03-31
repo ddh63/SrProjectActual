@@ -182,7 +182,11 @@ module.exports = function(app, pool) {
 				conn.query(query, function(err, result) {
 					if (err) throw err;
 					if (result.length > 0)
-						res.json(result);
+						conn.query('select id, genre from moviegenre left join genres on moviegenre.genre_id = genres.id where moviegenre.movie_id = ' + conn.escape(id), function(err, genresult) {
+							if (err) throw err;
+							result[0].genres = genresult;
+							res.json(result);
+						});
 					else
 						res.send('');
 				});
@@ -201,7 +205,7 @@ module.exports = function(app, pool) {
 		var genre = req.body.genre;
 		var order = req.body.order;
 
-		var query = 'select * from movies';
+		var query = 'select movies.id, movies.title, movies.year from movies';
 
 		var orderCon = '';
 
