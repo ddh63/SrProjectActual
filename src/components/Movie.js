@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
 
 import Loading from './Loading';
 import Nav from './Nav';
@@ -16,27 +15,47 @@ class Movie extends Component {
 	}
 
 	componentWillMount() {
-		if (this.state.id == undefined) {
-			this.setState({ id: 1 });
-			this.fetchMovie(1);
-		}
-		else
-			this.fetchMovie(this.state.id);
+		var data = {
+			type: 1,
+			id: this.state.id || 1
+		};
 
-		fetch('/api/isLoggedIn')
-			.then((response) => response.json())
-			.then((result) => this.setState({ user: result.user }));	
-	}
-
-	fetchMovie(id) {
-		fetch('/api/getSingleMovie?id='+id)
-			.then((response) => response.json())
-			.then((result) => this.setState({ movie: result, loaded: true }));
+		$.ajax({
+			type: 'POST',
+			url: '/api/getSingleVideo',
+			data: data
+		})
+		.done((data) => {
+			this.setState({ movie: data });
+			fetch('/api/isLoggedIn')
+				.then((response) => response.json())
+				.then((result) => this.setState({ user: result.user, loaded: true }));
+			})
+		.fail((jqXhr) => {
+			console.log("AJAX failure");
+		});	
 	}
 
 	render() {
 		if (!this.state.loaded) return <Loading />;
 		document.title = this.state.movie[0].title + " (" + this.state.movie[0].year + ")";
+
+		let numGenres = this.state.movie[0].genres.length;
+		let count = 0;
+		let genres = this.state.movie[0].genres.map((genre) => {
+			count++;
+			if (count != numGenres) {
+				return (
+					<span key={genre.id}>{genre.genre}, </span>
+				);
+			}
+			else {
+				return (
+					<span key={genre.id}>{genre.genre}</span>
+				);
+			}
+		});
+
 		return (
 			<div>
 				<Nav user={this.state.user} />
@@ -46,7 +65,8 @@ class Movie extends Component {
 							<img src="/img/posterplaceholder.png" />
 						</div>
 						<div className="col-sm-8">
-							<h1 className="text-center site"><strong>{this.state.movie[0].title}</strong> ({this.state.movie[0].year})</h1>
+							<h1 className="site"><strong>{this.state.movie[0].title}</strong> ({this.state.movie[0].year})</h1>
+							<span className="site">Genres: {genres}</span>
 						</div>
 					</div>
 

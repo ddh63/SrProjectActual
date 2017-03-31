@@ -145,30 +145,6 @@ module.exports = function(app, pool) {
 		});
 	});
 
-	// Gets all movies and displays on browse page
-	// TODO: Get rid of this and use the '/api/getSearch' endpoint
-	app.get('/api/getAllMovies', function(req, res) {
-	  pool.getConnection(function(err, conn) {
-	    conn.query('select * from movies', function(err, result) {
-	      if (err) throw err;
-	      res.json(result);
-	    });
-	    conn.release();
-	  });
-	});
-
-	// Used to get info for single video page
-	// TODO: Make this work with tv shows as well
-	app.get('/api/getSingleMovie', function(req, res) {
-		pool.getConnection(function(err, conn) {
-			conn.query('select * from movies where id='+conn.escape(req.query.id), function(err, result) {
-				if (err) throw err;
-				res.json(result);
-			});
-			conn.release();
-		});
-	});
-
 	// Retrieves video information to be displayed on video page
 	app.post('/api/getSingleVideo', function(req, res) {
 		var type = req.body.type;

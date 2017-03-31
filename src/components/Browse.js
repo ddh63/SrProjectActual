@@ -28,9 +28,7 @@ class Browse extends Component {
 			.then((response) => response.json())
 			.then((result) => this.setState({ genres: result }));
 
-		fetch('/api/getAllMovies')
-      .then((response) => response.json())
-      .then(result => this.setState({ videos: result }));
+		this.getVideos();
 
     this.handleSearch = this.handleSearch.bind(this);
     this.handleGenre = this.handleGenre.bind(this);
@@ -52,7 +50,10 @@ class Browse extends Component {
 
 	searchSubmit(e) {
 		e.preventDefault();
+		this.getVideos();
+	}
 
+	getVideos() {
 		var data = {
 			'search': this.state.search,
 			'genre': this.state.genre,

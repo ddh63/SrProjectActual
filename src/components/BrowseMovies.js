@@ -13,7 +13,7 @@ const BrowseMovies = (props) => {
 				<div className="col-md-3 col-xs-6" key={video.id}>
 					<div className="well video">
 						<PageLink to={"movie/"+video.id}>
-							<img src="img/posterplaceholder.png" />
+							<img src="/img/posterplaceholder.png" />
 							<h4 className="text-center video-title">{video.title}</h4>
 						</PageLink>
 						<div className="text-center video-year">{video.year}</div>
