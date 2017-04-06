@@ -4,9 +4,18 @@ class Pagination extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			current: 7,
-			count: 20
+			current: 1,
+			count: 7
 		}
+
+		this.pageChange = this.pageChange.bind(this);
+	}
+
+	pageChange(e) {
+		e.preventDefault();
+		let page = parseFloat(e.target.innerHTML);
+		if (Number.isInteger(page))
+			this.setState({ current: page });
 	}
 
 	render() {
@@ -14,18 +23,29 @@ class Pagination extends Component {
 		let pagesAdded = 0;
 		let pagesToDisplay = 10;
 		let pagesEitherSide = 0;
-		if (pagesToDisplay % 2 == 0)
+		let evenPageDisplay = !(pagesToDisplay % 2);
+
+		if (evenPageDisplay)
+			// Puts one less on left than right
 			pagesEitherSide = Math.floor(pagesToDisplay / 2) - 1;
 		else
 			pagesEitherSide = Math.floor(pagesToDisplay / 2);
 
-		for (var i = this.state.current - pagesEitherSide; pagesAdded < pagesToDisplay || i > this.state.count; i++) {
+		// Logic to put more pages on left side when close to last page
+		if (this.state.count - this.state.current <= pagesEitherSide) {
+			pagesEitherSide += pagesEitherSide - (this.state.count - this.state.current);
+			if (evenPageDisplay) pagesEitherSide++;
+		}
+
+		for (var i = this.state.current - pagesEitherSide; pagesAdded < pagesToDisplay; i++) {
+				if (i > this.state.count) 
+					break;
 				if (i < 1)
 					continue;
 				if (i != this.state.current)
-					pages.push(<li key={i}><a href='#'>{i}</a></li>);
+					pages.push(<li key={i}><a href='#' onClick={this.pageChange}>{i}</a></li>);
 				else
-					pages.push(<li key={i}><a className='page-active' href='#'>{i}</a></li>);
+					pages.push(<li key={i}><a className='page-active' href='#' onClick={this.pageChange}>{i}</a></li>);
 				pagesAdded++;
 		}
 
