@@ -6,6 +6,7 @@ import Login from './Login';
 import Browse from './Browse';
 import Movie from './Movie';
 import Video from './Video';
+import Pagination from './Pagination';
 import NotFound from './NotFound';
 
 const Routes = (
@@ -16,6 +17,7 @@ const Routes = (
 		<Route path="browse" component={Browse} />
 		<Route path="movie(/:id)" component={Movie} />
 		<Route path="video(/:type/:id)" component={Video} />
+		<Route path="pagination" component={Pagination} />
 		<Route path="*" component={NotFound} />
 	</Router>
 );
