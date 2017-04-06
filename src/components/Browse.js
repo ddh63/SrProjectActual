@@ -43,7 +43,7 @@ class Browse extends Component {
 		window.addEventListener('scroll', this.checkScroll);
 	}
 
-	componentWillMount() {
+	componentWillUnmount() {
 		window.removeEventListener('scroll', this.checkScroll);
 	}
 

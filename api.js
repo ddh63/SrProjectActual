@@ -210,4 +210,18 @@ module.exports = function(app, pool) {
 		
 	});
 
+	app.post('/api/check', function(req, res) {
+		pool.getConnection(function(err, conn) {
+			conn.query('select count(*) as count from movies', function(err, count) {
+					if (err) throw err;
+					conn.query('select * from movies', function(err, videos) {
+						if (err) throw err;
+						var data = [count[0].count, videos];
+						res.send(data);
+					});
+				});
+			conn.release();
+		});
+	});
+
 }

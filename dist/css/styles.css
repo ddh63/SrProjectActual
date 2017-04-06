@@ -152,6 +152,49 @@ a {
 	width: 20%;
 }
 
+.pagination-container {
+	text-align: center;
+}
+
+.pagination {
+	margin: 20px 0;
+	padding: 0;
+	list-style-type: none;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.pagination li {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	margin-left: 5px;
+	list-style: none;
+}
+
+.pagination li a {
+	border: 1px solid #777;
+	-webkit-border-radius: 0px !important;
+	-moz-border-radius: 0px !important;
+	border-radius: 0px !important;
+	padding: 8px 10px;
+	color: #eee;
+	background-color: #333;
+	-webkit-transition: background-color 0.25s ease;
+	-moz-transition: background-color 0.25s ease;
+	-o-transition: background-color 0.25s ease;
+	-ms-transition: background-color 0.25s ease;
+	transition: background-color 0.25s ease;
+}
+
+.pagination li a:hover,
+.page-active {
+	border: 1px solid #5cb85c !important;
+	background-color: #5cb85c !important;
+	color: #eee !important;
+}
+
 /*******************
 	Browse Page and New Releases on home page
  *******************/

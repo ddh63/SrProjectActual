@@ -22,6 +22,20 @@ class Home extends Component {
 		this.makeAjaxCall(this.state.releasetype);
 
 		this.handleButtonClick = this.handleButtonClick.bind(this);
+
+		$.ajax({
+			type: 'POST',
+			url: '/api/check',
+		})
+		.done((data) => {
+			// Count
+			console.log(data[0]);
+			// Videos
+			console.log(data[1]);
+		})
+		.fail((jqXhr) => {
+			console.log("AJAX failure");
+		});
 	}
 
 	makeAjaxCall(releasetype) {
