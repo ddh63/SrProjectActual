@@ -173,7 +173,8 @@ a {
 	list-style: none;
 }
 
-.pagination li a {
+.pagination li a,
+.pagination li span {
 	border: 1px solid #777;
 	-webkit-border-radius: 0px !important;
 	-moz-border-radius: 0px !important;
@@ -193,6 +194,12 @@ a {
 .page-active {
 	border: 1px solid #5cb85c !important;
 	background-color: #5cb85c !important;
+	color: #eee !important;
+}
+
+.pagination li .ellipsis:hover {
+	border: 1px solid #777 !important;
+	background-color: #333 !important;
 	color: #eee !important;
 }
 
