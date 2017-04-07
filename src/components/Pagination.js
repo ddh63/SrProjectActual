@@ -4,7 +4,7 @@ class Pagination extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			current: 5,
+			current: 1,
 			count: 35
 		}
 
@@ -21,6 +21,8 @@ class Pagination extends Component {
 
 	pageChangeArrow(e, val) {
 		e.preventDefault();
+		// Prevent click adding focus to the arrow buttons
+		e.target.tagName == 'A' ? e.target.blur() :	e.target.parentNode.blur();		
 		this.setState({ current: this.state.current + val });
 	}
 
@@ -97,7 +99,7 @@ class Pagination extends Component {
 			if (overrideEllipsis)
 				pages.push(<li key={this.state.count - 1}><a href="#" onClick={this.pageChange}>{this.state.count - 1}</a></li>);
 			else
-				pages.push(<li key={this.state.count - 1}><span className="ellipsis">...</span></li>);
+				pages.push(<li key={this.state.count - 1}><span className="ellipsis">...</span></li>);0
 		}
 
 		if (addToBack)
@@ -108,12 +110,26 @@ class Pagination extends Component {
 			pages.push(<li key={this.state.count + 1}><a href='#' className="back-arrow" onClick={(e) => this.pageChangeArrow(e, 1)}><i className="fa fa-angle-right"></i></a></li>);
 		}
 
+		// Make pagination for small screens
+		let pagesSmall = [];
+
+		if (this.state.current > 1) 
+			pagesSmall.push(<li key={1}><a href='#' onClick={(e) => this.pageChangeArrow(e, -1)}><i className="fa fa-angle-left"></i></a></li>);
+
+		pagesSmall.push(<li key={2}><span className='small-page-count'>{this.state.current} of {this.state.count}</span></li>);
+
+		if (this.state.current < this.state.count)
+			pagesSmall.push(<li key={3}><a href='#' onClick={(e) => this.pageChangeArrow(e, 1)}><i className="fa fa-angle-right"></i></a></li>);
+
 		return (
 			<div className="container">
 				<div className="row">
 					<div className="pagination-container">
-						<ul className="pagination site">
+						<ul className="hidden-xs hidden-sm pagination site">
 							{pages}
+						</ul>
+						<ul className="hidden-md hidden-lg hidden-xl pagination site">
+							{pagesSmall}
 						</ul>
 					</div>
 				</div>
