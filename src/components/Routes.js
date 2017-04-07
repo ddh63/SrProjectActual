@@ -17,7 +17,6 @@ const Routes = (
 		<Route path="browse" component={Browse} />
 		<Route path="movie(/:id)" component={Movie} />
 		<Route path="video(/:type/:id)" component={Video} />
-		<Route path="pagination" component={Pagination} />
 		<Route path="*" component={NotFound} />
 	</Router>
 );

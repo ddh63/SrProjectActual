@@ -4,6 +4,7 @@ import Loading from './Loading';
 import Nav from './Nav';
 import BrowseSearch from './BrowseSearch';
 import BrowseMovies from './BrowseMovies';
+import Pagination from './Pagination';
 
 class Browse extends Component {
 	constructor(props) {
@@ -15,7 +16,9 @@ class Browse extends Component {
 			genre: 0,
 			order: 1,
 			genres: [],
-			videos: []
+			videos: [],
+			currentPage: 1,
+			pageCount: 35
 		};
 
 		document.title = "Browse";
@@ -34,6 +37,9 @@ class Browse extends Component {
     this.handleGenre = this.handleGenre.bind(this);
     this.handleOrder = this.handleOrder.bind(this);
 		this.searchSubmit = this.searchSubmit.bind(this);
+
+		this.pageChange = this.pageChange.bind(this);
+		this.pageChangeArrow = this.pageChangeArrow.bind(this);
 	}
 
 	handleSearch(e) {
@@ -50,7 +56,21 @@ class Browse extends Component {
 
 	searchSubmit(e) {
 		e.preventDefault();
-		this.getInitialVideos();
+		this.getVideos();
+	}
+
+	pageChange(e) {
+		e.preventDefault();
+		let page = parseFloat(e.target.innerHTML);
+		if (Number.isInteger(page))
+			this.setState({ currentPage: page });
+	}
+
+	pageChangeArrow(e, val) {
+		e.preventDefault();
+		// Prevent click adding focus to the arrow buttons
+		e.target.tagName == 'A' ? e.target.blur() :	e.target.parentNode.blur();		
+		this.setState({ currentPage: this.state.currentPage + val });
 	}
 
 	getVideos() {
@@ -85,8 +105,20 @@ class Browse extends Component {
 					handleGenre={this.handleGenre}
 					handleOrder={this.handleOrder}
 					genres={this.state.genres} />
+					
+					<Pagination
+						pageChange={this.pageChange}
+						pageChangeArrow={this.pageChangeArrow}
+						currentPage={this.state.currentPage}
+						pageCount={this.state.pageCount} />
 
 					<BrowseMovies videos={this.state.videos} />
+
+					<Pagination
+						pageChange={this.pageChange}
+						pageChangeArrow={this.pageChangeArrow}
+						currentPage={this.state.currentPage}
+						pageCount={this.state.pageCount} />
 				</div>
 			</div>
 		);
