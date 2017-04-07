@@ -102,7 +102,7 @@ class Video extends Component {
 	updateButton() {
 		let toggle = document.querySelector('.toggle');
 		let video = document.querySelector('.html-video');
-		toggle.innerHTML = video.paused ? '<i class="icon-play"></i>' : '<i class="icon-pause"></i>';
+		toggle.innerHTML = video.paused ? '<i class="fa fa-play"></i>' : '<i class="fa fa-pause"></i>';
 	}
 
 	skip(i) {
@@ -124,7 +124,7 @@ class Video extends Component {
 		if (video['volume'] > 0) {
 			video['volume'] = 0;
 			volume.value = 0;
-			volumeButton.innerHTML = "<i class='icon-volume-off'></i>";
+			volumeButton.innerHTML = "<i class='fa fa-volume-off'></i>";
 		}
 		else {
 			video['volume'] = this.state.volumeLevel;
@@ -137,11 +137,11 @@ class Video extends Component {
 		let volume = document.querySelector('.player-slider');
 		let volumeButton = document.querySelector('.volume-toggle');
 		if (vol == 0)
-			volumeButton.innerHTML = "<i class='icon-volume-off'></i>";
+			volumeButton.innerHTML = "<i class='fa fa-volume-off'></i>";
 		else if (vol < 0.8)
-			volumeButton.innerHTML = "<i class='icon-volume-down'></i>";
+			volumeButton.innerHTML = "<i class='fa fa-volume-down'></i>";
 		else
-			volumeButton.innerHTML = "<i class='icon-volume-up'></i>";
+			volumeButton.innerHTML = "<i class='fa fa-volume-up'></i>";
 	}
 
 	handleProgress() {
@@ -201,7 +201,7 @@ class Video extends Component {
 			else if (document.msExitFullscreen)
 				document.msExitFullscreen();
 
-			screenSizeButton.innerHTML = '<i class="icon-resize-full"></i>';
+			screenSizeButton.innerHTML = '<i class="fa fa-expand"></i>';
 		}
 		// Become fullscreen
 	  else {
@@ -214,14 +214,14 @@ class Video extends Component {
 			else if (video.msRequestFullscreen)
 				video.msRequestFullscreen();
 
-			screenSizeButton.innerHTML = '<i class="icon-resize-small"></i>';
+			screenSizeButton.innerHTML = '<i class="fa fa-compress"></i>';
 		}
 	}
 
 	exitHandler() {
 		let screenSizeButton = document.querySelector('.screen-toggle');
 		if (this.state.fullscreen) {
-			screenSizeButton.innerHTML = '<i class="icon-resize-full"></i>';
+			screenSizeButton.innerHTML = '<i class="fa fa-expand"></i>';
 			this.setState({ fullscreen: false });
 	  }
 	  else

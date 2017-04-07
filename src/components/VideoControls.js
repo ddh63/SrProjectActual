@@ -13,28 +13,28 @@ const VideoControls = (props) => {
 			<button className="player-button toggle" 
 				title="Toggle Play"
 				onClick={props.togglePlay}>
-				<i className="icon-play"></i>
+				<i className="fa fa-play"></i>
 			</button>
 			<span className="time current"></span>
 			<span className="slash">/</span>
 			<span className="time end"></span>
 			<button className="player-button volume-toggle"
 				onClick={props.volumeToggle}>
-				<i className="icon-volume-up"></i>
+				<i className="fa fa-volume-up"></i>
 			</button>
 			<input type="range" name="volume" className="player-slider" min="0" max="1" step="0.05" defaultValue="1" 
 				onChange={props.handleVolumeUpdate} />
 			<button className="player-button"
 				onClick={props.skip.bind(null, -10)}>
-				<i className="icon-step-backward"></i>
+				<i className="fa fa-step-backward"></i>
 			</button>
 			<button className="player-button"
 				onClick={props.skip.bind(null, 10)}>
-				<i className="icon-step-forward"></i>
+				<i className="fa fa-step-forward"></i>
 			</button>
 			<button className="player-button screen-toggle"
 				onClick={props.screenSizeToggle}>
-				<i className="icon-resize-full"></i>
+				<i className="fa fa-expand"></i>
 			</button>
 		</div>
 	);

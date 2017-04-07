@@ -4,11 +4,12 @@ class Pagination extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			current: 28,
+			current: 5,
 			count: 35
 		}
 
 		this.pageChange = this.pageChange.bind(this);
+		this.pageChangeArrow = this.pageChangeArrow.bind(this);
 	}
 
 	pageChange(e) {
@@ -18,10 +19,15 @@ class Pagination extends Component {
 			this.setState({ current: page });
 	}
 
+	pageChangeArrow(e, val) {
+		e.preventDefault();
+		this.setState({ current: this.state.current + val });
+	}
+
 	render() {
 		let pages = [];
 		let pagesAdded = 0;
-		let pagesToDisplay = 10;
+		let pagesToDisplay = 9;
 		let pagesEitherSide = 0;
 		let evenPageDisplay = !(pagesToDisplay % 2);
 
@@ -39,8 +45,17 @@ class Pagination extends Component {
 			}
 		}
 
-		if (this.state.current - pagesEitherSide > 1) {
+		// Add arrow if page number is greater than 1
+		if (this.state.current > 1) {
+			pages.push(<li key={0}><a href='#' className="back-arrow" onClick={(e) => this.pageChangeArrow(e, -1)}><i className="fa fa-angle-left"></i></a></li>);
+		}
 
+		// Logic for ellipsis on the front part of pagination
+		if (this.state.current - pagesEitherSide > 1) {
+			pages.push(<li key={1}><a href='#' onClick={this.pageChange}>1</a></li>);
+		}
+		if (this.state.current - pagesEitherSide >= 3) {
+			pages.push(<li key={2}><span className="ellipsis">...</span></li>);
 		}
 
 		let addToBack = true;
@@ -88,12 +103,16 @@ class Pagination extends Component {
 		if (addToBack)
 				pages.push(<li key={this.state.count}><a href="#" onClick={this.pageChange}>{this.state.count}</a></li>);
 
+		// Add arrow if page number is less than last page
+		if (this.state.current < this.state.count) {
+			pages.push(<li key={this.state.count + 1}><a href='#' className="back-arrow" onClick={(e) => this.pageChangeArrow(e, 1)}><i className="fa fa-angle-right"></i></a></li>);
+		}
+
 		return (
 			<div className="container">
 				<div className="row">
 					<div className="pagination-container">
 						<ul className="pagination site">
-							<li><span>...</span></li>
 							{pages}
 						</ul>
 					</div>
