@@ -11,7 +11,7 @@ const BrowseSearch = (props) => {
 
 	return (
 		<div className="row">
-			<div className="col-md-6 col-md-offset-3 well">
+			<div className="col-md-6 col-md-offset-3 well search-form-container">
 				<form className="search-form" role="form" onSubmit={props.handleSubmit} >
 					<input name="search" id="search" autoComplete="off" type="search" placeholder="Search..." onChange={props.handleSearch} />
 					<button className="btn btn-success button" type="submit">Search</button>

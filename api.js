@@ -180,13 +180,24 @@ module.exports = function(app, pool) {
 		var searchValue = req.body.search;
 		var genre = req.body.genre;
 		var order = req.body.order;
+		var itemsPerPage = req.body.itemsPerPage;
+		var currentPage = req.body.currentPage;
 
-		var query = 'select movies.id, movies.title, movies.year from movies';
+		// Get starting item on page
+		var start = (itemsPerPage * (currentPage - 1)) + 1;
+		var end = itemsPerPage * currentPage;
+
+		var offset = start - 1;
+		var rows = end - start + 1;
+
+		var videoQuery = 'select movies.id, movies.title, movies.year from movies';
+		var countQuery = 'select count(*) as count from movies';
+		var addToQueries = '';
 
 		var orderCon = '';
 
 		if (genre != '0')
-			query += ' left join moviegenre on movies.id = moviegenre.movie_id left join genres on moviegenre.genre_id = genres.id';
+			addToQueries += ' left join moviegenre on movies.id = moviegenre.movie_id left join genres on moviegenre.genre_id = genres.id';
 
 		switch (order) {
 			case '1': orderCon = ' order by year desc'; break;
@@ -196,32 +207,27 @@ module.exports = function(app, pool) {
 		}
 
 		pool.getConnection(function(err, conn) {
-			query += ' where title like ' + conn.escape('%'+searchValue+'%');
+			addToQueries += ' where title like ' + conn.escape('%'+searchValue+'%');
 			if (genre != '0')
-				query += ' and genre_id = ' + conn.escape(genre);
-			query += orderCon;
+				addToQueries += ' and genre_id = ' + conn.escape(genre);
 
-			conn.query(query, function(err, result) {
+			videoQuery += addToQueries;
+			countQuery += addToQueries;
+
+			videoQuery += orderCon;
+			videoQuery += " limit " + offset + ", " + rows;
+
+			conn.query(countQuery, function(err, count) {
 				if (err) throw err;
-				res.json(result);
-			});
-			conn.release();
-		});
-		
-	});
-
-	app.post('/api/check', function(req, res) {
-		pool.getConnection(function(err, conn) {
-			conn.query('select count(*) as count from movies', function(err, count) {
-					if (err) throw err;
-					conn.query('select * from movies', function(err, videos) {
+					conn.query(videoQuery, function(err, videos) {
 						if (err) throw err;
 						var data = [count[0].count, videos];
 						res.send(data);
 					});
-				});
+			});
 			conn.release();
 		});
+		
 	});
 
 }

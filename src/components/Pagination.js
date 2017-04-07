@@ -28,13 +28,16 @@ const Pagination = (props) => {
 
 		// Logic for ellipsis on the front part of pagination
 		if (props.currentPage - pagesEitherSide > 1) {
-			pages.push(<li key={1}><a href='#' onClick={props.pageChange}>1</a></li>);
+					pages.push(<li key={1}><a href='#' onClick={props.pageChange}>1</a></li>);
 		}
 		if (props.currentPage - pagesEitherSide >= 3) {
 			pages.push(<li key={2}><span className="ellipsis">...</span></li>);
 		}
 
 		let addToBack = true;
+		if (props.pageCount == 1) 
+			addToBack = false;
+
 		for (var i = props.currentPage - pagesEitherSide; pagesAdded < pagesToDisplay; i++) {
 				if (i > props.pageCount) 
 					break;
@@ -77,7 +80,7 @@ const Pagination = (props) => {
 		}
 
 		if (addToBack)
-				pages.push(<li key={props.pageCount}><a href="#" onClick={props.pageChange}>{props.pageCount}</a></li>);
+			pages.push(<li key={props.pageCount}><a href="#" onClick={props.pageChange}>{props.pageCount}</a></li>);
 
 		// Add arrow if page number is less than last page
 		if (props.currentPage < props.pageCount) {
@@ -96,7 +99,6 @@ const Pagination = (props) => {
 			pagesSmall.push(<li key={3}><a href='#' onClick={(e) => props.pageChangeArrow(e, 1)}><i className="fa fa-angle-right"></i></a></li>);
 
 		return (
-			<div className="container">
 				<div className="row">
 					<div className="pagination-container">
 						<ul className="hidden-xs hidden-sm pagination site">
@@ -107,7 +109,6 @@ const Pagination = (props) => {
 						</ul>
 					</div>
 				</div>
-			</div>
 		);
 }
 

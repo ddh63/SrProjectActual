@@ -17,8 +17,10 @@ class Browse extends Component {
 			order: 1,
 			genres: [],
 			videos: [],
+			itemsPerPage: 12,
+			totalVideos: 0,
 			currentPage: 1,
-			pageCount: 35
+			pageCount: 1
 		};
 
 		document.title = "Browse";
@@ -31,7 +33,7 @@ class Browse extends Component {
 			.then((response) => response.json())
 			.then((result) => this.setState({ genres: result }));
 
-		this.getVideos();
+		this.getVideos(this.state.currentPage);
 
     this.handleSearch = this.handleSearch.bind(this);
     this.handleGenre = this.handleGenre.bind(this);
@@ -56,14 +58,16 @@ class Browse extends Component {
 
 	searchSubmit(e) {
 		e.preventDefault();
-		this.getVideos();
+		this.getVideos(this.state.currentPage);
 	}
 
 	pageChange(e) {
 		e.preventDefault();
 		let page = parseFloat(e.target.innerHTML);
-		if (Number.isInteger(page))
+		if (Number.isInteger(page)) {
 			this.setState({ currentPage: page });
+			this.getVideos(page);
+		}
 	}
 
 	pageChangeArrow(e, val) {
@@ -71,13 +75,16 @@ class Browse extends Component {
 		// Prevent click adding focus to the arrow buttons
 		e.target.tagName == 'A' ? e.target.blur() :	e.target.parentNode.blur();		
 		this.setState({ currentPage: this.state.currentPage + val });
+		this.getVideos(this.state.currentPage + val);
 	}
 
-	getVideos() {
+	getVideos(page) {
 		var data = {
 			'search': this.state.search,
 			'genre': this.state.genre,
-			'order': this.state.order
+			'order': this.state.order,
+			'itemsPerPage': this.state.itemsPerPage,
+			'currentPage': page
 		}
 
 		$.ajax({
@@ -86,7 +93,7 @@ class Browse extends Component {
 			data: data
 		})
 		.done((data) => {
-			this.setState({ videos: data });
+			this.setState({ totalVideos: data[0], videos: data[1], pageCount: Math.ceil(data[0] / this.state.itemsPerPage) });
 		})
 		.fail((jqXhr) => {
 			console.log("AJAX failure");
@@ -105,7 +112,7 @@ class Browse extends Component {
 					handleGenre={this.handleGenre}
 					handleOrder={this.handleOrder}
 					genres={this.state.genres} />
-					
+
 					<Pagination
 						pageChange={this.pageChange}
 						pageChangeArrow={this.pageChangeArrow}
