@@ -133,6 +133,38 @@ a {
 }
 
 /*******************
+	Cart Page
+ *******************/
+
+.cart-head {
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+.cart {
+	border: 1px solid #101010;
+	background: #222;
+}
+
+table {
+	width: 100%;
+}
+
+td, th { 
+	border: 1px solid transparent;
+	height: 30px; 
+	text-align: center;
+}
+
+th {
+	background: #161616;
+	font-weight: bold;
+}
+ 
+tr:nth-child(odd) td { background: #383838; }
+tr:nth-child(even) td { background: #222; }
+
+/*******************
 	Browse Page
  *******************/
 
