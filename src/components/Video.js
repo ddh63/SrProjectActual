@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 
 import Nav from './Nav';
-import Loading from './Loading'
 import VideoPlayer from './VideoPlayer';
 import VideoDescription from './VideoDescription';
 
@@ -10,8 +9,6 @@ class Video extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: null,
-			loaded: false,
 			volumeLevel: 1,
 			mousedown: false,
 			fullscreen: false,
@@ -40,9 +37,6 @@ class Video extends Component {
 					browserHistory.push('/browse');
 				else {
 					this.setState({ video: data });
-					fetch('/api/isLoggedIn')
-						.then((response) => response.json())
-						.then((result) => this.setState({ user: result.user, loaded: true }));
 				}
 			})
 			.fail((jqXhr) => {
@@ -229,7 +223,17 @@ class Video extends Component {
 	}
 
 	render() {
-		if (!this.state.loaded) return <Loading />;
+		if (typeof this.state.video[0] === 'undefined') {
+			document.title = "Loading";
+			return (
+				<div>
+					<Nav />
+				</div>
+			);
+		}
+
+		document.title = this.state.video[0].title + " (" + this.state.video[0].year + ")";
+
 		return (
 			<div>
 				<Nav user={this.state.user} />

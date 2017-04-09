@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import Loading from './Loading';
 import Nav from './Nav';
 import BrowseSearch from './BrowseSearch';
 import BrowseMovies from './BrowseMovies';
@@ -10,8 +9,6 @@ class Browse extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: null,
-			loaded: false,
 			search: '',
 			genre: 0,
 			order: 1,
@@ -24,10 +21,6 @@ class Browse extends Component {
 		};
 
 		document.title = "Browse";
-
-		fetch('/api/isLoggedIn')
-			.then((response) => response.json())
-			.then((result) => this.setState({ user: result.user, loaded: true }));
 
 		fetch('/api/getGenres')
 			.then((response) => response.json())
@@ -101,10 +94,9 @@ class Browse extends Component {
 	}
 
 	render() {
-		if (!this.state.loaded) return <Loading />;
 		return (
 			<div>
-				<Nav user={this.state.user} />
+				<Nav />
 				<div className="container">
 					<BrowseSearch 
 					handleSearch={this.handleSearch}

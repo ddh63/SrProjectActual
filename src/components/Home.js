@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Nav from './Nav';
 import HomeLanding from './HomeLanding';
-import Loading from './Loading';
 import NewReleases from './NewReleases';
 
 class Home extends Component {
@@ -9,20 +8,16 @@ class Home extends Component {
 		super(props);
     	document.title = "Streaming Site";
 		this.state = {
-			user: null,
-			loaded: false,
+			user: false,
 			releasetype: 'movies',
 			videos: []
 		}
 
-		fetch('/api/isLoggedIn')
-			.then((response) => response.json())
-			.then((result) => this.setState({ user: result.user, loaded: true }));
-
 		this.makeAjaxCall(this.state.releasetype);
 
 		this.handleButtonClick = this.handleButtonClick.bind(this);
-		
+
+		this.getUser = this.getUser.bind(this);
 	}
 
 	makeAjaxCall(releasetype) {
@@ -74,11 +69,15 @@ class Home extends Component {
 		this.setState({ releasetype: nextState });
 	}
 
+	getUser(username) {
+		this.setState({ user: username });
+	}
+
   render() {
-  	if (!this.state.loaded) return <Loading />;
     return (
       <div>
-      	<Nav user={this.state.user} />
+      	<Nav
+      		getUser={this.getUser} />
       	<HomeLanding user={this.state.user} />
       	<NewReleases 
       		videos={this.state.videos}

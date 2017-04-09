@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
 
-import Loading from './Loading';
 import Nav from './Nav';
 
 class Movie extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: null,
-			loaded: false,
 			id: this.props.params.id,
 			movie: []
 		}
-	}
 
-	componentWillMount() {
 		var data = {
 			type: 1,
 			id: this.state.id || 1
@@ -27,17 +22,22 @@ class Movie extends Component {
 		})
 		.done((data) => {
 			this.setState({ movie: data });
-			fetch('/api/isLoggedIn')
-				.then((response) => response.json())
-				.then((result) => this.setState({ user: result.user, loaded: true }));
-			})
+		})
 		.fail((jqXhr) => {
 			console.log("AJAX failure");
 		});	
 	}
 
 	render() {
-		if (!this.state.loaded) return <Loading />;
+		if (typeof this.state.movie[0] === 'undefined') {
+			document.title = "Loading";
+			return (
+				<div>
+					<Nav />
+				</div>
+			);
+		}
+
 		document.title = this.state.movie[0].title + " (" + this.state.movie[0].year + ")";
 
 		let numGenres = this.state.movie[0].genres.length;
@@ -58,7 +58,7 @@ class Movie extends Component {
 
 		return (
 			<div>
-				<Nav user={this.state.user} />
+				<Nav />
 				<div className="container well">
 					<div className="row">
 						<div className="col-sm-4 poster">

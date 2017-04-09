@@ -1,26 +1,19 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
+
 import Nav from './Nav';
 import FormContainer from './FormContainer';
-import { browserHistory } from 'react-router';
 
 class Login extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			usercheck: null,
+			usercheck: true,
 			user: '',
 			email: '',
 			pass: '',
 			confirmpass: ''
 		}
-
-		fetch('/api/isLoggedIn')
-			.then((response) => response.json())
-			.then((result) => { 
-				this.setState({ usercheck: result.user }); 
-				if (this.state.usercheck != null)
-					browserHistory.push('/'); 
-			});
 
 		this.handleUsername = this.handleUsername.bind(this);
 		this.handleEmail = this.handleEmail.bind(this);
@@ -99,7 +92,7 @@ class Login extends Component {
 	render() {
 		return (
 			<div>
-				<Nav user={this.state.usercheck} />
+				<Nav usercheck={this.state.usercheck} />
 				<FormContainer 
 					value={this.props.route.path} 
 					userField={this.handleUsername}
