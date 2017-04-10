@@ -63,6 +63,11 @@ class Video extends Component {
 		document.removeEventListener('MSFullscreenChange', this.exitHandler.bind(this));
   }
 
+  getUser(username) {
+		if (!username)
+			browserHistory.push('/browse');
+	}
+
   handleKeyPresses(e) {
   	// Stops spacebar press from scrolling down
   	if (e.keyCode == 32 && e.target == document.body) {
@@ -236,7 +241,8 @@ class Video extends Component {
 
 		return (
 			<div>
-				<Nav user={this.state.user} />
+				<Nav
+					getUser={this.getUser} />
 				<div className="container well video-container">
 					<div className="player-container">
 						<VideoPlayer 

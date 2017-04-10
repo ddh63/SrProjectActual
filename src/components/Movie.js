@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 
+import PageLink from './PageLink';
 import Nav from './Nav';
 
 class Movie extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			user: false,
 			id: this.props.params.id,
 			movie: []
 		}
@@ -26,6 +28,12 @@ class Movie extends Component {
 		.fail((jqXhr) => {
 			console.log("AJAX failure");
 		});	
+
+		this.getUser = this.getUser.bind(this);
+	}
+
+	getUser(username) {
+		this.setState({ user: username });
 	}
 
 	render() {
@@ -56,9 +64,19 @@ class Movie extends Component {
 			}
 		});
 
+		let button = null;
+
+		if (!this.state.user) {
+			button = <PageLink to="/login" className="btn btn-success">Login to Watch/Purchase</PageLink>;
+		}
+		else {
+			button = <PageLink to={"/video/1/"+this.state.id} className="btn btn-success">Watch</PageLink>
+		}
+
 		return (
 			<div>
-				<Nav />
+				<Nav 
+					getUser={this.getUser} />
 				<div className="container well">
 					<div className="row">
 						<div className="col-sm-4 poster">
@@ -72,7 +90,7 @@ class Movie extends Component {
 
 					<div className="row">
 						<div className="col-xs-12 buttons text-center">
-							<a href={"/video/1/"+this.state.id} className="btn btn-success">Watch</a>
+							{button}
 						</div>
 					</div>
 				</div>

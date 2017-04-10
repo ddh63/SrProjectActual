@@ -79,13 +79,14 @@ const Pagination = (props) => {
 				pages.push(<li key={props.pageCount - 1}><span className="ellipsis">...</span></li>);0
 		}
 
-		if (addToBack)
+		if (addToBack && pagesToDisplay < props.pageCount)
 			pages.push(<li key={props.pageCount}><a href="#" onClick={props.pageChange}>{props.pageCount}</a></li>);
 
 		// Add arrow if page number is less than last page
 		if (props.currentPage < props.pageCount) {
 			pages.push(<li key={props.pageCount + 1}><a href='#' className="back-arrow" onClick={(e) => props.pageChangeArrow(e, 1)}><i className="fa fa-angle-right"></i></a></li>);
 		}
+
 
 		// Make pagination for small screens
 		let pagesSmall = [];

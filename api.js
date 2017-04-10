@@ -122,9 +122,9 @@ module.exports = function(app, pool) {
 
 			// Change these when tv table is made and movie table is filled up more
 			if (req.body.releasetype == 'movies')
-				query = 'select * from movies order by id desc limit 2';
+				query = 'select * from video where type_id = 1 order by id desc limit 2';
 			else if (req.body.releasetype == 'tv')
-				query = 'select * from movies limit 2';
+				query = 'select * from video where type_id = 1 limit 2';
 
 			conn.query(query, function(err, result) {
 				if (err) throw err;
@@ -154,11 +154,11 @@ module.exports = function(app, pool) {
 
 		if (type == '1') {
 			pool.getConnection(function(err, conn) {
-				query = 'select * from movies where id = ' + conn.escape(id); 
+				query = 'select * from video where id = ' + conn.escape(id); 
 				conn.query(query, function(err, result) {
 					if (err) throw err;
 					if (result.length > 0)
-						conn.query('select id, genre from moviegenre left join genres on moviegenre.genre_id = genres.id where moviegenre.movie_id = ' + conn.escape(id), function(err, genresult) {
+						conn.query('select id, genre from videogenre left join genres on videogenre.genre_id = genres.id where videogenre.video_id = ' + conn.escape(id), function(err, genresult) {
 							if (err) throw err;
 							result[0].genres = genresult;
 							res.json(result);
@@ -190,14 +190,14 @@ module.exports = function(app, pool) {
 		var offset = start - 1;
 		var rows = end - start + 1;
 
-		var videoQuery = 'select movies.id, movies.title, movies.year from movies';
-		var countQuery = 'select count(*) as count from movies';
+		var videoQuery = 'select video.id, video.title, video.year from video';
+		var countQuery = 'select count(*) as count from video';
 		var addToQueries = '';
 
 		var orderCon = '';
 
 		if (genre != '0')
-			addToQueries += ' left join moviegenre on movies.id = moviegenre.movie_id left join genres on moviegenre.genre_id = genres.id';
+			addToQueries += ' left join videogenre on video.id = videogenre.video_id left join genres on videogenre.genre_id = genres.id';
 
 		switch (order) {
 			case '1': orderCon = ' order by year desc'; break;

@@ -105,19 +105,26 @@ class Browse extends Component {
 					handleOrder={this.handleOrder}
 					genres={this.state.genres} />
 
-					<Pagination
-						pageChange={this.pageChange}
-						pageChangeArrow={this.pageChangeArrow}
-						currentPage={this.state.currentPage}
-						pageCount={this.state.pageCount} />
+					{this.state.pageCount > 0 &&
+						<div>
+							<h3 className="text-center site video-count">{this.state.totalVideos} results found</h3>
+							<Pagination
+								pageChange={this.pageChange}
+								pageChangeArrow={this.pageChangeArrow}
+								currentPage={this.state.currentPage}
+								pageCount={this.state.pageCount} />
+						</div>
+					}
 
 					<BrowseMovies videos={this.state.videos} />
 
-					<Pagination
-						pageChange={this.pageChange}
-						pageChangeArrow={this.pageChangeArrow}
-						currentPage={this.state.currentPage}
-						pageCount={this.state.pageCount} />
+					{this.state.pageCount > 0 && 
+						<Pagination
+							pageChange={this.pageChange}
+							pageChangeArrow={this.pageChangeArrow}
+							currentPage={this.state.currentPage}
+							pageCount={this.state.pageCount} />
+					}
 				</div>
 			</div>
 		);

@@ -188,6 +188,10 @@ tr:nth-child(even) td { background: #222; }
 	width: 20%;
 }
 
+.video-count {
+	margin-bottom: 0;
+}
+
 .pagination-container {
 	text-align: center;
 }
