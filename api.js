@@ -108,7 +108,7 @@ module.exports = function(app, pool) {
 		});
 	});
 
-	// Checks if use is logged in
+	// Checks if user is logged in
 	app.get('/api/isLoggedIn', function(req, res) {
 		if (typeof sess == 'object' && sess.username)
 			res.json({'user': sess.username})
@@ -178,9 +178,24 @@ module.exports = function(app, pool) {
 	// Adds video to user's cart
 	app.post('/api/addToCart', function(req, res) {
 		var user = req.body.user;
-		var id = req.body.id;
+		var id = parseInt(req.body.id);
 
-		console.log(user, id);
+		pool.getConnection(function (err, conn) {
+			conn.query("select id from users where username = " + conn.escape(user), function(err, result) {
+				if (err) throw err;
+				// Setup insert query that only inserts if item isn't already in the cart
+				query = "insert into cart (user_id, video_id) ";
+				query += "select * from (select " + conn.escape(result[0].id) + ", " + conn.escape(id) + ") as tmp ";
+				query += "where not exists (";
+				query += "select user_id, video_id from cart where user_id = " + conn.escape(result[0].id) + " and video_id = " + conn.escape(id);
+				query += ") limit 1;";
+				conn.query(query, function(err, insertresult) {
+					if (err) throw err;
+				});
+			});
+			conn.release();
+		});
+
 
 		res.send('done');
 	});
