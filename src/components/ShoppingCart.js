@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Nav from './Nav';
+import ShoppingCartTable from './ShoppingCartTable';
 import PageLink from './PageLink';
 
 class ShoppingCart extends Component {
@@ -8,7 +9,8 @@ class ShoppingCart extends Component {
 		super(props);
 		this.state = {
 			user: false,
-			loaded: false
+			loaded: false,
+			movies: []
 		}
 
 		// Nav didn't update on initial load of this page
@@ -29,13 +31,14 @@ class ShoppingCart extends Component {
 				user: this.state.user
 			};
 
+			// Get movie information
 			$.ajax({
 				type: 'POST',
-				url: '/api/fillCart',
+				url: '/api/fillCartMovies',
 				data: data
 			})
 			.done((data) => {
-				console.log(data);
+				this.setState({ movies: data });
 			})
 			.fail((jqXhr) => {
 				console.log("AJAX failure");
@@ -61,30 +64,9 @@ class ShoppingCart extends Component {
 
 									<form>
 
-										<table className="site">
-											<thead>
-												<tr>
-													<th>Title</th>
-													<th>Description</th>
-													<th>Price</th>
-													<th></th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<td>Logan</td>
-													<td>Movie</td>
-													<td>$6.99</td>
-													<td>X</td>
-												</tr>
-												<tr>
-													<td>Logan</td>
-													<td>Movie</td>
-													<td>$6.99</td>
-													<td>X</td>
-												</tr>
-											</tbody>
-										</table>
+										<h4 className="text-center site">Movies</h4>
+										<ShoppingCartTable 
+											movies={this.state.movies} />
 
 									</form>
 

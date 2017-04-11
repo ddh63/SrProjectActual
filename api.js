@@ -185,7 +185,7 @@ module.exports = function(app, pool) {
 				if (err) throw err;
 				var userid = result[0].id;
 				// Setup insert query that only inserts if item isn't already in the cart
-				query = "insert into cart (user_id, video_id) ";
+				var query = "insert into cart (user_id, video_id) ";
 				query += "select * from (select " + conn.escape(userid) + ", " + conn.escape(id) + ") as tmp ";
 				query += "where not exists (";
 				query += "select user_id, video_id from cart where user_id = " + conn.escape(userid) + " and video_id = " + conn.escape(id);
@@ -201,22 +201,26 @@ module.exports = function(app, pool) {
 		res.send('');
 	});
 
-	// Gets the information of items in user's cart
-	app.post('/api/fillCart', function(req, res) {
+	// Gets the information of movies in user's cart
+	// TODO: Make this a function that gets called on a higher level function that gets tv shows as well
+	app.post('/api/fillCartMovies', function(req, res) {
 		var user = req.body.user;
 		
 		pool.getConnection(function(err, conn) {
-			conn.query("select id from users where username = " + conn.escape(user), function(err, result) {
+			conn.query("select id from users where username = " + conn.escape(user), function(err, userid) {
 				if (err) throw err;
-				var userid = result[0].id;
-				conn.query("select video_id from cart where user_id = " + conn.escape(userid), function(err, cartItems) {
+				// Building up the query
+				var query = "select v.id, v.title, m.price ";
+				query += "from cart c left join video v on c.video_id = v.id ";
+				query += "left join movies m on v.id = m.video_id ";
+				query += "where c.user_id = " + conn.escape(userid[0].id) + " and v.type_id = 1";
+				conn.query(query, function(err, result) {
 					if (err) throw err;
-					console.log(cartItems[0]);
+					res.send(result);
 				});
 			});
+			conn.release();
 		});
-
-		res.send('');
 	});
 	
 	// Gets result of search on browse page
