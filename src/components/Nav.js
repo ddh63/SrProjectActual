@@ -16,10 +16,8 @@ class Nav extends Component {
 				.then((result) => { 
 					this.setState({ user: result.user, loaded: true })
 					// When user is needed on page other than nav
-					if (typeof this.props.getUser !== 'undefined') {
-						console.log(result.user);
+					if (typeof this.props.getUser !== 'undefined')
 						this.props.getUser(result.user);
-					}
 				});
 		}
 		// Used to redirect when logged in on login/register page

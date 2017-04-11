@@ -180,14 +180,15 @@ module.exports = function(app, pool) {
 		var user = req.body.user;
 		var id = parseInt(req.body.id);
 
-		pool.getConnection(function (err, conn) {
+		pool.getConnection(function(err, conn) {
 			conn.query("select id from users where username = " + conn.escape(user), function(err, result) {
 				if (err) throw err;
+				var userid = result[0].id;
 				// Setup insert query that only inserts if item isn't already in the cart
 				query = "insert into cart (user_id, video_id) ";
-				query += "select * from (select " + conn.escape(result[0].id) + ", " + conn.escape(id) + ") as tmp ";
+				query += "select * from (select " + conn.escape(userid) + ", " + conn.escape(id) + ") as tmp ";
 				query += "where not exists (";
-				query += "select user_id, video_id from cart where user_id = " + conn.escape(result[0].id) + " and video_id = " + conn.escape(id);
+				query += "select user_id, video_id from cart where user_id = " + conn.escape(userid) + " and video_id = " + conn.escape(id);
 				query += ") limit 1;";
 				conn.query(query, function(err, insertresult) {
 					if (err) throw err;
@@ -197,7 +198,25 @@ module.exports = function(app, pool) {
 		});
 
 
-		res.send('done');
+		res.send('');
+	});
+
+	// Gets the information of items in user's cart
+	app.post('/api/fillCart', function(req, res) {
+		var user = req.body.user;
+		
+		pool.getConnection(function(err, conn) {
+			conn.query("select id from users where username = " + conn.escape(user), function(err, result) {
+				if (err) throw err;
+				var userid = result[0].id;
+				conn.query("select video_id from cart where user_id = " + conn.escape(userid), function(err, cartItems) {
+					if (err) throw err;
+					console.log(cartItems[0]);
+				});
+			});
+		});
+
+		res.send('');
 	});
 	
 	// Gets result of search on browse page
