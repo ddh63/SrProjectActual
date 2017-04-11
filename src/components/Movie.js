@@ -8,9 +8,17 @@ class Movie extends Component {
 		super(props);
 		this.state = {
 			user: false,
+			loaded: false,
 			id: this.props.params.id,
 			movie: []
 		}
+
+		// Nav didn't update on initial load of this page
+		// So put the user check here
+		fetch('/api/isLoggedIn')
+			.then((response) => response.json())
+			.then((result) => { 
+				this.setState({ user: result.user, loaded: true }) });
 
 		var data = {
 			type: 1,
@@ -27,13 +35,29 @@ class Movie extends Component {
 		})
 		.fail((jqXhr) => {
 			console.log("AJAX failure");
-		});	
+		});
 
-		this.getUser = this.getUser.bind(this);
+		this.addToCart = this.addToCart.bind(this);
 	}
 
-	getUser(username) {
-		this.setState({ user: username });
+	addToCart(e) {
+		e.preventDefault();
+		var data = {
+			user: this.state.user,
+			id: this.state.id
+		};
+
+		$.ajax({
+			type: 'POST',
+			url: '/api/addToCart',
+			data: data
+		})
+		.done((data) => {
+			console.log('added to cart');
+		})
+		.fail((jqXhr) => {
+			console.log("AJAX failure");
+		});
 	}
 
 	render() {
@@ -66,17 +90,23 @@ class Movie extends Component {
 
 		let button = null;
 
-		if (!this.state.user) {
-			button = <PageLink to="/login" className="btn btn-success">Login to Watch/Purchase</PageLink>;
-		}
-		else {
-			button = <PageLink to={"/video/1/"+this.state.id} className="btn btn-success">Watch</PageLink>
+		if (this.state.loaded) {
+			if (!this.state.user) {
+				button = <PageLink to="/login" className="btn btn-success">Login to Watch/Purchase</PageLink>;
+			}
+			else {
+				button = <a href="#" className="btn btn-success" onClick={this.addToCart}>Add to Cart</a>
+			}
+			/*
+			else {
+				button = <PageLink to={"/video/1/"+this.state.id} className="btn btn-success">Watch</PageLink>
+			}
+			*/
 		}
 
 		return (
 			<div>
-				<Nav 
-					getUser={this.getUser} />
+				<Nav />
 				<div className="container well">
 					<div className="row">
 						<div className="col-sm-4 poster">

@@ -174,6 +174,16 @@ module.exports = function(app, pool) {
 			res.send('');
 		}
 	});
+
+	// Adds video to user's cart
+	app.post('/api/addToCart', function(req, res) {
+		var user = req.body.user;
+		var id = req.body.id;
+
+		console.log(user, id);
+
+		res.send('done');
+	});
 	
 	// Gets result of search on browse page
 	app.post('/api/getSearch', function(req, res) {

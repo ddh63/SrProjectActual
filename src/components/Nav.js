@@ -15,9 +15,11 @@ class Nav extends Component {
 				.then((response) => response.json())
 				.then((result) => { 
 					this.setState({ user: result.user, loaded: true })
-					// front page
-					if (typeof this.props.getUser !== 'undefined')
+					// When user is needed on page other than nav
+					if (typeof this.props.getUser !== 'undefined') {
+						console.log(result.user);
 						this.props.getUser(result.user);
+					}
 				});
 		}
 		// Used to redirect when logged in on login/register page
@@ -34,6 +36,9 @@ class Nav extends Component {
 	}
 
 	render() {
+		if (this.props.getUser !== 'undefined')
+
+
 		if (!this.state.loaded) {
 			return (
 				<nav className="navbar navbar-inverse">
@@ -60,7 +65,7 @@ class Nav extends Component {
 			else {
 				navlinks = (
 					<ul className="nav navbar-nav navbar-right">
-						<li><PageLink to="browse">Browse</PageLink></li>
+						<li><PageLink to="/browse">Browse</PageLink></li>
 						<li><a href="#">{this.state.user}</a></li>
 					</ul>
 				);
