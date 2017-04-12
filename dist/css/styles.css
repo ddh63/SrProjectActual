@@ -145,8 +145,22 @@ a {
 	width: 100%;
 }
 
+.cart-title,
+.cart-remove {
+	color: #eee;
+		-webkit-transition: color 0.15s ease;
+	-moz-transition: color 0.15s ease;
+	-o-transition: color 0.15s ease;
+	-ms-transition: color 0.15s ease;
+	transition: color 0.15s ease;
+}
+
 .cart-title:hover {
 	color: #5cb85c;
+}
+
+.cart-remove:hover {
+	color: #d9534f
 }
 
 .cart-table-container {

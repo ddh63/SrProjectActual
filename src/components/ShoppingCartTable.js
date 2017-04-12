@@ -20,10 +20,10 @@ const ShoppingCartTable = (props) => {
 		tableRows = props.movies.map((movie) => {
 			return (
 				<tr key={movie.id}>
-					<td><PageLink to={"/movie/" + movie.id} className="site cart-title">{movie.title}</PageLink></td>
+					<td><PageLink to={"/movie/" + movie.id} className="cart-title">{movie.title}</PageLink></td>
 					<td>Movie</td>
 					<td>${movie.price}</td>
-					<td>X</td>
+					<td><i data-id={movie.id} className="cart-remove fa fa-times" aria-hidden="true" onClick={props.removeItem}></i></td>
 				</tr>
 			);
 		});

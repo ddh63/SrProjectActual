@@ -47,6 +47,10 @@ class ShoppingCart extends Component {
 
 	}
 
+	removeItem(e) {
+		console.log(e.target.dataset.id);
+	}
+
 
 	render() {
 		return (
@@ -66,7 +70,8 @@ class ShoppingCart extends Component {
 
 										<h4 className="text-center site">Movies</h4>
 										<ShoppingCartTable 
-											movies={this.state.movies} />
+											movies={this.state.movies}
+											removeItem={this.removeItem} />
 
 									</form>
 

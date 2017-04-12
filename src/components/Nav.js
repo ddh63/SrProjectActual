@@ -27,7 +27,7 @@ class Nav extends Component {
 			.then((result) => { 
 				this.setState({ user: result.user, loaded: true });
 				if (this.state.user)
-					browserHistory.push('/');
+					browserHistory.goBack();
 			});
 		}
 

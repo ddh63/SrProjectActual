@@ -3,6 +3,8 @@ import Nav from './Nav';
 import HomeLanding from './HomeLanding';
 import NewReleases from './NewReleases';
 
+import { browserHistory } from 'react-router';
+
 class Home extends Component {
 	constructor(props) {
 		super(props);

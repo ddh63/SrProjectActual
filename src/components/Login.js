@@ -24,6 +24,15 @@ class Login extends Component {
 		this.registerSubmit = this.registerSubmit.bind(this);
 	}
 
+	componentDidUpdate() {
+		fetch('/api/isLoggedIn')
+			.then((response) => response.json())
+			.then((result) => { 
+				if (result.user)
+					browserHistory.goBack(); 
+			});
+	}
+
 	handleUsername(e) {
 		this.setState({ user: e.target.value });
 	}
@@ -80,7 +89,7 @@ class Login extends Component {
 		})
 		.done((data) => {
 				if (data == '')
-					browserHistory.push('/');
+					browserHistory.goBack();
 				else
 					$('#fail-message').html(data);
 		})
