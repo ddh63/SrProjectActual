@@ -10,6 +10,7 @@ class ShoppingCart extends Component {
 		this.state = {
 			user: false,
 			loaded: false,
+			deleteditem: false,
 			movies: []
 		}
 
@@ -19,13 +20,15 @@ class ShoppingCart extends Component {
 			.then((response) => response.json())
 			.then((result) => { 
 				this.setState({ user: result.user, loaded: true }) });
+	
+			this.removeItem = this.removeItem.bind(this);
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 		// user is logged on due to user state changing
 		// also, won't update cart on each page update
 		// might change when implementing remove item
-		if (this.state.user != prevState.user) {
+		if (this.state.user != prevState.user || this.state.deleteditem) {
 
 			var data = {
 				user: this.state.user
@@ -38,7 +41,7 @@ class ShoppingCart extends Component {
 				data: data
 			})
 			.done((data) => {
-				this.setState({ movies: data });
+				this.setState({ movies: data, deleteditem: false });
 			})
 			.fail((jqXhr) => {
 				console.log("AJAX failure");
@@ -48,7 +51,24 @@ class ShoppingCart extends Component {
 	}
 
 	removeItem(e) {
-		console.log(e.target.dataset.id);
+		var data = {
+			user: this.state.user,
+			id: e.target.dataset.id,
+			type: e.target.dataset.type
+		}
+
+		$.ajax({
+				type: 'POST',
+				url: '/api/removeFromCart',
+				data: data
+			})
+			.done((data) => {
+				this.setState({ deleteditem: true });
+				console.log(data);
+			})
+			.fail((jqXhr) => {
+				console.log("AJAX failure");
+			});
 	}
 
 
@@ -68,7 +88,6 @@ class ShoppingCart extends Component {
 
 									<form>
 
-										<h4 className="text-center site">Movies</h4>
 										<ShoppingCartTable 
 											movies={this.state.movies}
 											removeItem={this.removeItem} />

@@ -203,6 +203,25 @@ module.exports = function(app, pool) {
 		});
 	});
 
+	// Removes item from cart
+	app.post('/api/removeFromCart', function(req, res) {
+		var user = req.body.user;
+		var id = req.body.id;
+
+		pool.getConnection(function(err, conn) {
+			conn.query("select id from users where username = " + conn.escape(user), function(err, result) {
+				if (err) throw err;
+				var userid = result[0].id;
+			 	conn.query("delete from cart where user_id = " + conn.escape(userid) + " and video_id = " + conn.escape(id), function(err, deleteresult) {
+			 		if (err) throw err;
+			 		console.log(deleteresult);
+			 	});
+			});
+		});
+
+		res.send('done');
+	});
+
 	// Gets the information of movies in user's cart
 	// TODO: Make this a function that gets called on a higher level function that gets tv shows as well
 	app.post('/api/fillCartMovies', function(req, res) {
