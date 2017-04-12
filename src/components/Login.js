@@ -54,7 +54,7 @@ class Login extends Component {
 		})
 		.done((data) => {
 			if (data == '')
-				browserHistory.push('/');
+				browserHistory.goBack();
 			else
 				$('#fail-message').html(data);
 		})

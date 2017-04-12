@@ -53,7 +53,10 @@ class Movie extends Component {
 			data: data
 		})
 		.done((data) => {
-			console.log('added to cart');
+			if (data)
+				document.getElementById('cart-text').innerHTML = "<h3 class='text-center site'>Added to cart</h3>";
+			else
+				document.getElementById('cart-text').innerHTML = "<h3 class='text-center site'>Item already in cart</h3>";
 		})
 		.fail((jqXhr) => {
 			console.log("AJAX failure");
@@ -119,6 +122,7 @@ class Movie extends Component {
 					</div>
 
 					<div className="row">
+						<div id="cart-text"></div>
 						<div className="col-xs-12 buttons text-center">
 							{button}
 						</div>

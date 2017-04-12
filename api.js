@@ -192,13 +192,15 @@ module.exports = function(app, pool) {
 				query += ") limit 1;";
 				conn.query(query, function(err, insertresult) {
 					if (err) throw err;
+					// Inserted into cart
+					if (insertresult.affectedRows)
+						res.send(true);
+					else
+						res.send(false);
 				});
 			});
 			conn.release();
 		});
-
-
-		res.send('');
 	});
 
 	// Gets the information of movies in user's cart
