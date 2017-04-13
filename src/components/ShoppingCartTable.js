@@ -3,12 +3,15 @@ import React from 'react';
 import PageLink from './PageLink';
 
 const ShoppingCartTable = (props) => {
-	let tableHeader = null;
-	let tableRows = null;
+	let movieTableHeader = null;
+	let movieTableRows = null;
+	let price = 0.0;
+	let count = 0;
+	let comment = null;
 
 	if (typeof props.movies != 'undefined') {
 		if (props.movies.length != 0) {
-			tableHeader = (
+			movieTableHeader = (
 				<thead>
 					<tr>
 						<th>Title</th>
@@ -18,7 +21,9 @@ const ShoppingCartTable = (props) => {
 					</tr>
 				</thead>
 			);
-			tableRows = props.movies.map((movie) => {
+			movieTableRows = props.movies.map((movie) => {
+				count++;
+				price += movie.price;
 				return (
 					<tr key={movie.id}>
 						<td><PageLink to={"/movie/" + movie.id} className="cart-title">{movie.title}</PageLink></td>
@@ -31,6 +36,22 @@ const ShoppingCartTable = (props) => {
 		}
 	}
 
+	if (count == 0) {
+		console.log(props.madepurchase);
+		if (!props.madepurchase)
+			comment = <h3 className="text-center site">No items in cart</h3>;
+		else
+			comment = <h3 className="text-center site">Purchase made</h3>;
+	}
+	else {
+		comment = (
+			<div className="text-center buttons">
+				<h3 className="site">Total: ${price.toFixed(2)}</h3>;
+				<button className="btn btn-success" onClick={props.makePurchase}>Purchase</button>
+			</div>
+		);
+	}
+
 
 	return (
 		<div>
@@ -40,15 +61,16 @@ const ShoppingCartTable = (props) => {
 					<div className="cart-table-container">
 
 						<table className="site">
-							{tableHeader}
+							{movieTableHeader}
 							<tbody>
-								{tableRows}
+								{movieTableRows}
 							</tbody>
 						</table>
 					
 					</div>
 				</div>
 			}
+			{comment}
 		</div>
 	);
 }

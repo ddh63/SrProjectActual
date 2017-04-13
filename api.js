@@ -6,6 +6,7 @@ module.exports = function(app, pool) {
 
 	var pool = mysql.createPool({
 	  connectionLimit: 10,
+	  multipleStatements: true,
 	  host: 'localhost',
 	  user: 'root',
 	  password: 'localpassword',
@@ -204,6 +205,7 @@ module.exports = function(app, pool) {
 	});
 
 	// Removes item from cart
+	// TODO: Return back the item removed to show to user (Maybe have an undo option)
 	app.post('/api/removeFromCart', function(req, res) {
 		var user = req.body.user;
 		var id = req.body.id;
@@ -214,12 +216,35 @@ module.exports = function(app, pool) {
 				var userid = result[0].id;
 			 	conn.query("delete from cart where user_id = " + conn.escape(userid) + " and video_id = " + conn.escape(id), function(err, deleteresult) {
 			 		if (err) throw err;
-			 		console.log(deleteresult);
 			 	});
 			});
 		});
 
 		res.send('done');
+	});
+
+	app.post('/api/purchase', function(req, res) {
+		var user = req.body.user;
+		var movies = req.body.movies;
+
+		pool.getConnection(function(err, conn) {
+			conn.query("select id from users where username = " + conn.escape(user), function(err, userid) {
+				if (err) throw err;
+				var queries = '';
+				for (var i = 0; i < movies.length; ++i) {
+					queries += "insert into userowned (user_id, video_id) values (" + conn.escape(userid[0].id) + ", " + conn.escape(parseInt(movies[i].id)) + ");\n";
+				}
+				conn.query(queries, function(err, insertresult) {
+					if (err) throw err;
+					conn.query("delete from cart where user_id = " + conn.escape(userid[0].id), function(err, result) {
+						if (err) throw err;
+					});
+				});	
+			});
+			conn.release();
+		});
+
+		res.send('');
 	});
 
 	// Gets the information of movies in user's cart

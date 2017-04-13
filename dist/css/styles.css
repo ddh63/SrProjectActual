@@ -148,7 +148,8 @@ a {
 .cart-title,
 .cart-remove {
 	color: #eee;
-		-webkit-transition: color 0.15s ease;
+	cursor: pointer;
+	-webkit-transition: color 0.15s ease;
 	-moz-transition: color 0.15s ease;
 	-o-transition: color 0.15s ease;
 	-ms-transition: color 0.15s ease;

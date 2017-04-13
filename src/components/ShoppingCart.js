@@ -11,6 +11,7 @@ class ShoppingCart extends Component {
 			user: false,
 			loaded: false,
 			deleteditem: false,
+			madepurchase: false,
 			movies: []
 		}
 
@@ -22,13 +23,14 @@ class ShoppingCart extends Component {
 				this.setState({ user: result.user, loaded: true }) });
 	
 			this.removeItem = this.removeItem.bind(this);
+			this.makePurchase = this.makePurchase.bind(this);
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 		// user is logged on due to user state changing
 		// also, won't update cart on each page update
 		// might change when implementing remove item
-		if (this.state.user != prevState.user || this.state.deleteditem) {
+		if (this.state.user != prevState.user || this.state.deleteditem || this.state.madepurchase) {
 
 			var data = {
 				user: this.state.user
@@ -71,6 +73,27 @@ class ShoppingCart extends Component {
 			});
 	}
 
+	makePurchase(e) {
+		e.preventDefault();
+
+		var data = {
+			user: this.state.user,
+			movies: this.state.movies
+		}
+
+		$.ajax({
+			type: 'POST',
+			url: '/api/purchase',
+			data: data
+		})
+		.done((data) => {
+			this.setState({ movies: [], madepurchase: true });
+		})
+		.fail((jqXhr) => {
+			console.log("AJAX failure");
+		});
+	}
+
 
 	render() {
 		return (
@@ -90,7 +113,9 @@ class ShoppingCart extends Component {
 
 										<ShoppingCartTable 
 											movies={this.state.movies}
-											removeItem={this.removeItem} />
+											madepurchase={this.state.madepurchase}
+											removeItem={this.removeItem}
+											makePurchase={this.makePurchase} />
 
 									</form>
 
