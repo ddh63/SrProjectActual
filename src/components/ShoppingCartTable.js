@@ -37,8 +37,14 @@ const ShoppingCartTable = (props) => {
 	}
 
 	if (count == 0) {
-		if (!props.madepurchase)
-			comment = <h3 className="text-center site">No items in cart</h3>;
+		if (!props.madepurchase) {
+			comment = (
+				<div className="text-center buttons">
+					<h3 className="site">No items in cart</h3>;
+					<PageLink to="/browse" className="btn btn-success">Browse</PageLink>
+				</div>
+			);
+		}
 		else
 			comment = <h3 className="text-center site">Purchase made</h3>;
 	}

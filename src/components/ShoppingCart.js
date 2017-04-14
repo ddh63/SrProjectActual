@@ -10,7 +10,8 @@ class ShoppingCart extends Component {
 		this.state = {
 			user: false,
 			loaded: false,
-			deleteditem: false,
+			update: false,
+			deleteditemvalue: [],
 			madepurchase: false,
 			movies: []
 		}
@@ -25,13 +26,14 @@ class ShoppingCart extends Component {
 	
 			this.removeItem = this.removeItem.bind(this);
 			this.makePurchase = this.makePurchase.bind(this);
+			this.reAddVideo = this.reAddVideo.bind(this);
 	}
 
 	componentDidUpdate(prevProps, prevState) {
 		// user is logged on due to user state changing
 		// also, won't update cart on each page update
 		// might change when implementing remove item
-		if (this.state.user != prevState.user || this.state.deleteditem || this.state.madepurchase) {
+		if (this.state.user != prevState.user || this.state.update || this.state.madepurchase) {
 
 			var data = {
 				user: this.state.user
@@ -44,7 +46,7 @@ class ShoppingCart extends Component {
 				data: data
 			})
 			.done((data) => {
-				this.setState({ movies: data, deleteditem: false });
+				this.setState({ movies: data, update: false });
 			})
 			.fail((jqXhr) => {
 				console.log("AJAX failure");
@@ -66,11 +68,30 @@ class ShoppingCart extends Component {
 				data: data
 			})
 			.done((data) => {
-				this.setState({ deleteditem: true });
+				this.setState({ update: true, deleteditemvalue: data[0] });
 			})
 			.fail((jqXhr) => {
 				console.log("AJAX failure");
 			});
+	}
+
+	reAddVideo(e) {
+		var data = {
+			id: this.state.deleteditemvalue.id,
+			user: this.state.user
+		}
+
+		$.ajax({
+			type: 'POST',
+			url: '/api/addToCart',
+			data: data
+		})
+		.done((data) => {
+			this.setState({ deleteditemvalue: [], update: true });
+		})
+		.fail((jqXhr) => {
+			console.log("AJAX failure");
+		});
 	}
 
 	makePurchase(e) {
@@ -96,6 +117,14 @@ class ShoppingCart extends Component {
 
 
 	render() {
+		let comment = null;
+
+		if (this.state.deleteditemvalue.length != 0) {
+			comment = (
+				<p className="text-center site">Removed <PageLink to={"/movie/" + this.state.deleteditemvalue.id}><strong>{this.state.deleteditemvalue.title}</strong></PageLink> from cart. <span onClick={this.reAddVideo} className="undo-delete">Undo.</span></p>
+			);
+		}
+
 		return (
 			<div>
 				<Nav 
@@ -105,19 +134,17 @@ class ShoppingCart extends Component {
 						<div className="col-md-6 col-md-offset-3">
 
 						<h1 className="text-center site cart-head">Shopping Cart</h1>
-
+							<div id="removeitemconfirm">
+								{comment}
+							</div>
 							{this.state.user && this.state.loaded &&
 								<div className="cart">
-
-									<form>
 
 										<ShoppingCartTable 
 											movies={this.state.movies}
 											madepurchase={this.state.madepurchase}
 											removeItem={this.removeItem}
 											makePurchase={this.makePurchase} />
-
-									</form>
 
 								</div>
 							}

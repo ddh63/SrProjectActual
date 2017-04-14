@@ -236,11 +236,14 @@ module.exports = function(app, pool) {
 				var userid = result[0].id;
 			 	conn.query("delete from cart where user_id = " + conn.escape(userid) + " and video_id = " + conn.escape(id), function(err, deleteresult) {
 			 		if (err) throw err;
+			 		conn.query('select * from video where id = ' + conn.escape(id), function(err, video) {
+			 			if (err) throw err;
+			 			res.send(video);
+			 		});
 			 	});
 			});
+			conn.release();
 		});
-
-		res.send('done');
 	});
 
 	// Makes purchase

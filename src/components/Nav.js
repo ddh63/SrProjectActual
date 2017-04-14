@@ -66,6 +66,7 @@ class Nav extends Component {
 						<li><PageLink to="/browse">Browse</PageLink></li>
 						<li><PageLink to="/cart">Cart</PageLink></li>
 						<li><PageLink to="/account">{this.state.user}</PageLink></li>
+						<li><a href="/api/logout">Logout</a></li>
 					</ul>
 				);
 			}
