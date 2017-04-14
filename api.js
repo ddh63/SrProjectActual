@@ -176,6 +176,25 @@ module.exports = function(app, pool) {
 		}
 	});
 
+	app.post('/api/checkOwned', function(req, res) {
+		var user = req.body.user;
+		var id = req.body.id;
+
+		pool.getConnection(function(err, conn) {
+			conn.query("select id from users where username = " + conn.escape(user), function(err, userid) {
+				if (err) throw err;
+				conn.query("select * from userowned where user_id = " + conn.escape(userid[0].id) + " and video_id = " + conn.escape(id), function(err, result) {
+					if (err) throw err;
+					if (result.length)
+						res.send(true);
+					else
+						res.send(false);
+				});
+			});
+			conn.release();
+		});
+	});
+
 	// Adds video to user's cart
 	app.post('/api/addToCart', function(req, res) {
 		var user = req.body.user;
@@ -322,6 +341,27 @@ module.exports = function(app, pool) {
 			conn.release();
 		});
 		
+	});
+
+	// Fill users account page with owned videos
+	app.post('/api/getOwnedVideos', function(req, res) {
+		var user = req.body.user;
+
+		pool.getConnection(function(err, conn) {
+			conn.query("select id from users where username = " + conn.escape(user), function(err, userid) {
+				if (err) throw err;
+				// Build query
+				// TODO: Currently only set for movies
+				var query = "select v.id, v.title, v.year ";
+				query += "from userowned u left join video v on u.video_id = v.id ";
+				query += "where u.user_id = " + conn.escape(userid[0].id);
+				conn.query(query, function(err, movies) {
+					if (err) throw err;
+					res.send(movies);
+				});
+			});
+			conn.release();
+		});
 	});
 
 }

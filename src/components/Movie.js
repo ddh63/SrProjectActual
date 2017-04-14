@@ -9,6 +9,7 @@ class Movie extends Component {
 		this.state = {
 			user: false,
 			loaded: false,
+			owned: false,
 			id: this.props.params.id,
 			movie: []
 		}
@@ -38,6 +39,27 @@ class Movie extends Component {
 		});
 
 		this.addToCart = this.addToCart.bind(this);
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (this.state.user != prevState.user) {
+			var data = {
+				user: this.state.user,
+				id: this.state.id || 1
+			}
+
+			$.ajax({
+				type: "POST",
+				url: "/api/checkOwned",
+				data: data
+			})
+			.done((data) => {
+				this.setState({ owned: data });
+			})
+			.fail((jqXhr) => {
+				console.log("AJAX failure");
+			});
+		}
 	}
 
 	addToCart(e) {
@@ -98,13 +120,11 @@ class Movie extends Component {
 				button = <PageLink to="/login" className="btn btn-success">Login to Watch/Purchase</PageLink>;
 			}
 			else {
-				button = <a href="#" className="btn btn-success" onClick={this.addToCart}>Add to Cart</a>
+				if (!this.state.owned)
+					button = <a href="#" className="btn btn-success" onClick={this.addToCart}>Add to Cart</a>
+				else
+					button = <PageLink to={"/video/1/"+this.state.id} className="btn btn-success">Watch</PageLink>
 			}
-			/*
-			else {
-				button = <PageLink to={"/video/1/"+this.state.id} className="btn btn-success">Watch</PageLink>
-			}
-			*/
 		}
 
 		return (

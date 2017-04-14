@@ -65,7 +65,7 @@ class Nav extends Component {
 					<ul className="nav navbar-nav navbar-right">
 						<li><PageLink to="/browse">Browse</PageLink></li>
 						<li><PageLink to="/cart">Cart</PageLink></li>
-						<li><a href="#">{this.state.user}</a></li>
+						<li><PageLink to="/account">{this.state.user}</PageLink></li>
 					</ul>
 				);
 			}

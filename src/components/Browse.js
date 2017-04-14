@@ -51,7 +51,7 @@ class Browse extends Component {
 
 	searchSubmit(e) {
 		e.preventDefault();
-		this.getVideos(this.state.currentPage);
+		this.getVideos(1);
 	}
 
 	pageChange(e) {

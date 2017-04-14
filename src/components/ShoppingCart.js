@@ -20,7 +20,8 @@ class ShoppingCart extends Component {
 		fetch('/api/isLoggedIn')
 			.then((response) => response.json())
 			.then((result) => { 
-				this.setState({ user: result.user, loaded: true }) });
+				this.setState({ user: result.user, loaded: true }) 
+			});
 	
 			this.removeItem = this.removeItem.bind(this);
 			this.makePurchase = this.makePurchase.bind(this);
@@ -66,7 +67,6 @@ class ShoppingCart extends Component {
 			})
 			.done((data) => {
 				this.setState({ deleteditem: true });
-				console.log(data);
 			})
 			.fail((jqXhr) => {
 				console.log("AJAX failure");
@@ -122,7 +122,7 @@ class ShoppingCart extends Component {
 								</div>
 							}
 
-							{this.state.loaded && !this.state.user &&
+							{!this.state.user && this.state.loaded &&
 								<div className="buttons text-center">
 									<PageLink to="login" className="btn btn-success">Login</PageLink>
 								</div>

@@ -7,6 +7,7 @@ import Browse from './Browse';
 import Movie from './Movie';
 import Video from './Video';
 import ShoppingCart from './ShoppingCart';
+import Account from './Account';
 import NotFound from './NotFound';
 
 const Routes = (
@@ -18,6 +19,7 @@ const Routes = (
 		<Route path="movie(/:id)" component={Movie} />
 		<Route path="video(/:type/:id)" component={Video} />
 		<Route path="cart" component={ShoppingCart} />
+		<Route path="account" component={Account} />
 		<Route path="*" component={NotFound} />
 	</Router>
 );

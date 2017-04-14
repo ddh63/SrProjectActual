@@ -37,7 +37,6 @@ const ShoppingCartTable = (props) => {
 	}
 
 	if (count == 0) {
-		console.log(props.madepurchase);
 		if (!props.madepurchase)
 			comment = <h3 className="text-center site">No items in cart</h3>;
 		else
