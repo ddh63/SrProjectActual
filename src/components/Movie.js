@@ -121,7 +121,7 @@ class Movie extends Component {
 			}
 			else {
 				if (!this.state.owned)
-					button = <a href="#" className="btn btn-success" onClick={this.addToCart}>Add to Cart</a>
+					button = <a href="#" className="btn btn-success" onClick={this.addToCart}>Add to Cart (${this.state.movie[0].price})</a>
 				else
 					button = <PageLink to={"/video/1/"+this.state.id} className="btn btn-success">Watch</PageLink>
 			}
@@ -135,16 +135,14 @@ class Movie extends Component {
 						<div className="col-sm-4 poster">
 							<img src="/img/posterplaceholder.png" />
 						</div>
-						<div className="col-sm-8">
-							<h1 className="site"><strong>{this.state.movie[0].title}</strong> ({this.state.movie[0].year})</h1>
-							<span className="site">Genres: {genres}</span>
-						</div>
-					</div>
-
-					<div className="row">
-						<div id="cart-text"></div>
-						<div className="col-xs-12 buttons text-center">
-							{button}
+						<div className="col-sm-8 description">
+							<h1 className="text-center site">{this.state.movie[0].title} ({this.state.movie[0].year})</h1>
+							<p className="text-center site">{genres}</p>
+							<p className="site">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+							<div id="cart-text"></div>
+							<div className="buttons text-center">
+								{button}
+							</div>
 						</div>
 					</div>
 				</div>

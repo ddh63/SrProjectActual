@@ -123,9 +123,9 @@ module.exports = function(app, pool) {
 
 			// Change these when tv table is made and movie table is filled up more
 			if (req.body.releasetype == 'movies')
-				query = 'select * from video where type_id = 1 order by id desc limit 2';
+				query = 'select * from video where type_id = 1 order by id desc limit 4';
 			else if (req.body.releasetype == 'tv')
-				query = 'select * from video where type_id = 1 limit 2';
+				query = 'select * from video where type_id = 1 limit 4';
 
 			conn.query(query, function(err, result) {
 				if (err) throw err;
@@ -155,7 +155,7 @@ module.exports = function(app, pool) {
 
 		if (type == '1') {
 			pool.getConnection(function(err, conn) {
-				query = 'select * from video where id = ' + conn.escape(id); 
+				query = 'select v.id, v.type_id, v.title, v.year, m.price from video v left join movies m on v.id = m.video_id where id = ' + conn.escape(id); 
 				conn.query(query, function(err, result) {
 					if (err) throw err;
 					if (result.length > 0)
@@ -176,6 +176,7 @@ module.exports = function(app, pool) {
 		}
 	});
 
+	// Checks to see if user owns video
 	app.post('/api/checkOwned', function(req, res) {
 		var user = req.body.user;
 		var id = req.body.id;
@@ -242,6 +243,7 @@ module.exports = function(app, pool) {
 		res.send('done');
 	});
 
+	// Makes purchase
 	app.post('/api/purchase', function(req, res) {
 		var user = req.body.user;
 		var movies = req.body.movies;

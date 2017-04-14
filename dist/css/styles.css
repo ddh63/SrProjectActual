@@ -331,6 +331,22 @@ tr:nth-child(even) td { background: #222; }
 	width: 100%;
 }
 
+.description .buttons a {
+	margin-right: 0;
+}
+
+@media (min-width: 768px) {
+	.poster img {
+		width: 90%;
+	}
+}
+
+@media (min-width: 992px) {
+	.description {
+		margin-top: 80px;
+	} 
+}
+
 /*******************
 	Video Player Page
  *******************/
