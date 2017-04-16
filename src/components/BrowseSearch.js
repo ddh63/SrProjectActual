@@ -33,6 +33,14 @@ const BrowseSearch = (props) => {
 						</select>
 					</div>
 
+					<div className="select-search-container">
+						<p className="select-desc">Page display:</p>
+						<select name="order" className="select-search" onChange={props.handlePagination}>
+							<option value="1">Pagination</option>
+							<option value="2">Infinite Scroll</option>						
+						</select>
+					</div>
+
 				</form>
 			</div>
 		</div>

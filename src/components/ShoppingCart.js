@@ -16,6 +16,8 @@ class ShoppingCart extends Component {
 			movies: []
 		}
 
+		document.title = "Cart";
+
 		// Nav didn't update on initial load of this page
 		// So put the user check here
 		fetch('/api/isLoggedIn')

@@ -12,6 +12,8 @@ class Account extends Component {
 			movies: []
 		}
 
+		document.title = "Account";
+
 		// Nav didn't update on initial load of this page
 		// So put the user check here
 		fetch('/api/isLoggedIn')

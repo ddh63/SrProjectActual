@@ -333,13 +333,12 @@ module.exports = function(app, pool) {
 			countQuery += addToQueries;
 
 			videoQuery += orderCon;
-			videoQuery += " limit " + offset + ", " + rows;
 
 			conn.query(countQuery, function(err, count) {
 				if (err) throw err;
 					conn.query(videoQuery, function(err, videos) {
 						if (err) throw err;
-						var data = [count[0].count, videos];
+						var data = [count[0].count, videos.slice(offset, offset + rows)];
 						res.send(data);
 					});
 			});
