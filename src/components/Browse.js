@@ -16,7 +16,7 @@ class Browse extends Component {
 			genres: [],
 			videos: [],
 			trackPagination: 1,
-			pagination: false,
+			pagination: true,
 			itemsPerPage: 12,
 			totalVideos: 0,
 			currentPage: 1,
@@ -154,9 +154,12 @@ class Browse extends Component {
 		.done((data) => {
 			if (this.state.newSearch) {
 				if (this.state.trackPagination == 1)
-					this.setState({ totalVideos: data[0], videos: data[1], pageCount: Math.ceil(data[0] / this.state.itemsPerPage), pagination: true, newSearch: false });
+					this.setState({ totalVideos: data[0], videos: data[1], pageCount: Math.ceil(data[0] / this.state.itemsPerPage), pagination: true, currentPage: 1, newSearch: false });
 				else
-					this.setState({ totalVideos: data[0], videos: data[1], pageCount: Math.ceil(data[0] / this.state.itemsPerPage), pagination: false, newSearch: false });
+					this.setState({ totalVideos: data[0], videos: data[1], pageCount: Math.ceil(data[0] / this.state.itemsPerPage), pagination: false, currentPage: 1, newSearch: false });
+			}
+			else if (this.state.trackPagination == 1) {
+				this.setState({ totalVideos: data[0], videos: data[1], pageCount: Math.ceil(data[0] / this.state.itemsPerPage), pagination: true, newSearch: false });
 			}
 			else {
 				this.setState({ totalVideos: data[0], videos: [...this.state.videos, ...data[1]], pageCount: Math.ceil(data[0] / this.state.itemsPerPage), currentPage: page });
@@ -206,7 +209,7 @@ class Browse extends Component {
 
 					{!this.state.pagination && this.state.currentPage < this.state.pageCount &&
 						<div className="text-center buttons">
-							<button className="btn btn-default" id="load-more" role="button">Load More</button>
+							<button className="btn btn-default" id="load-more" role="button" onClick={this.checkLoadMore}>Load More</button>
 						</div>
 					}
 
