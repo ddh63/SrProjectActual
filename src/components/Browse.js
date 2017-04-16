@@ -15,7 +15,8 @@ class Browse extends Component {
 			order: 1,
 			genres: [],
 			videos: [],
-			pagination: true,
+			trackPagination: 1,
+			pagination: false,
 			itemsPerPage: 12,
 			totalVideos: 0,
 			currentPage: 1,
@@ -37,6 +38,8 @@ class Browse extends Component {
 		this.searchSubmit = this.searchSubmit.bind(this);
 
 		this.checkLoadMore = this.checkLoadMore.bind(this);
+
+		this.smoothScroll = this.smoothScroll.bind(this);
 
 		this.pageChange = this.pageChange.bind(this);
 		this.pageChangeArrow = this.pageChangeArrow.bind(this);
@@ -83,7 +86,7 @@ class Browse extends Component {
   }
 
 	handleSearch(e) {
-		this.setState({ search: e.target.value, newSearch: true });
+		this.setState({ search: e.target.value });
 	}
 
 	handleGenre(e) {
@@ -95,12 +98,12 @@ class Browse extends Component {
 	}
 
 	handlePagination(e) {
-		let boolVal = e.target.value == 1 ? true : false;
-		this.setState({ pagination: boolVal });
+		this.setState({ trackPagination: e.target.value });
 	}
 
 	searchSubmit(e) {
 		e.preventDefault();
+		this.setState({ newSearch: true });
 		this.getVideos(1);
 	}
 
@@ -121,6 +124,19 @@ class Browse extends Component {
 		this.getVideos(this.state.currentPage + val);
 	}
 
+	smoothScroll(e) {
+		let docHeight = document.body.scrollTop;
+
+		// 25 intervals == 0.5 seconds
+		let scrollUp = Math.ceil(docHeight / 25);
+
+		let intr = setInterval(function() {
+			window.scrollBy(0, -scrollUp);
+			docHeight -= scrollUp;
+			if (docHeight < 0) clearInterval(intr);
+		}, 20);
+	}
+
 	getVideos(page) {
 		var data = {
 			'search': this.state.search,
@@ -136,14 +152,19 @@ class Browse extends Component {
 			data: data
 		})
 		.done((data) => {
-			if (this.state.pagination || this.state.newSearch) {
-				this.setState({ totalVideos: data[0], videos: data[1], pageCount: Math.ceil(data[0] / this.state.itemsPerPage), newSearch: false });
+			if (this.state.newSearch) {
+				if (this.state.trackPagination == 1)
+					this.setState({ totalVideos: data[0], videos: data[1], pageCount: Math.ceil(data[0] / this.state.itemsPerPage), pagination: true, newSearch: false });
+				else
+					this.setState({ totalVideos: data[0], videos: data[1], pageCount: Math.ceil(data[0] / this.state.itemsPerPage), pagination: false, newSearch: false });
 			}
 			else {
 				this.setState({ totalVideos: data[0], videos: [...this.state.videos, ...data[1]], pageCount: Math.ceil(data[0] / this.state.itemsPerPage), currentPage: page });
 				let loadButton = document.getElementById('load-more');
-				loadButton.classList.remove('disabled');
-	  		loadButton.innerHTML = "Load More";
+				if (typeof loadButton != 'undefined' && loadButton != null) {
+					loadButton.classList.remove('disabled');
+		  		loadButton.innerHTML = "Load More";
+		  	}
 			}
 		})
 		.fail((jqXhr) => {
@@ -186,6 +207,12 @@ class Browse extends Component {
 					{!this.state.pagination && this.state.currentPage < this.state.pageCount &&
 						<div className="text-center buttons">
 							<button className="btn btn-default" id="load-more" role="button">Load More</button>
+						</div>
+					}
+
+					{!this.state.pagination && this.state.currentPage == this.state.pageCount && this.state.pageCount > 1 &&
+						<div className="text-center buttons">
+							<button className="btn btn-default" id="to-the-top" role="button" onClick={this.smoothScroll}>Back to Top</button>
 						</div>
 					}
 

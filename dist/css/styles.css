@@ -270,7 +270,8 @@ tr:nth-child(even) td { background: #222; }
 	color: #eee !important;
 }
 
-#load-more {
+#load-more,
+#to-the-top {
 	margin-bottom: 20px;
 }
 
