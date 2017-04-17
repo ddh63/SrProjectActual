@@ -333,7 +333,7 @@ module.exports = function(app, pool) {
 			countQuery += addToQueries;
 
 			videoQuery += orderCon;
-
+			
 			conn.query(countQuery, function(err, count) {
 				if (err) throw err;
 					conn.query(videoQuery, function(err, videos) {
@@ -350,18 +350,57 @@ module.exports = function(app, pool) {
 	// Fill users account page with owned videos
 	app.post('/api/getOwnedVideos', function(req, res) {
 		var user = req.body.user;
+		var searchValue = req.body.search;
+		var genre = req.body.genre;
+		var order = req.body.order;
+		var itemsPerPage = req.body.itemsPerPage;
+		var currentPage = req.body.currentPage;
 
 		pool.getConnection(function(err, conn) {
 			conn.query("select id from users where username = " + conn.escape(user), function(err, userid) {
 				if (err) throw err;
+				// Get starting item on page
+				var start = (itemsPerPage * (currentPage - 1)) + 1;
+				var end = itemsPerPage * currentPage;
+
+				var offset = start - 1;
+				var rows = end - start + 1;
+
 				// Build query
 				// TODO: Currently only set for movies
-				var query = "select v.id, v.title, v.year ";
-				query += "from userowned u left join video v on u.video_id = v.id ";
-				query += "where u.user_id = " + conn.escape(userid[0].id);
-				conn.query(query, function(err, movies) {
+				var videoQuery = 'select v.id, v.title, v.year from userowned uo left join video v on uo.video_id = v.id';
+				var countQuery = 'select count(*) as count from userowned uo left join video v on uo.video_id = v.id';
+				var addToQueries = '';
+
+				var orderCon = '';
+
+				if (genre != '0')
+					addToQueries += ' left join videogenre vg on v.id = vg.video_id left join genres g on vg.genre_id = g.id';
+
+				switch (order) {
+					case '1': orderCon = ' order by year desc'; break;
+					case '2': orderCon = ' order by id desc'; break;
+					case '3': orderCon = ' order by id asc'; break;
+					default: orderCon = ' order by year desc';
+				}
+
+				addToQueries += ' where v.title like ' + conn.escape('%'+searchValue+'%');
+				addToQueries += ' and uo.user_id = ' + conn.escape(userid[0].id);
+				if (genre != '0')
+					addToQueries += ' and genre_id = ' + conn.escape(genre);
+
+				videoQuery += addToQueries;
+				countQuery += addToQueries;
+
+				videoQuery += orderCon;
+
+				conn.query(countQuery, function(err, count) {
 					if (err) throw err;
-					res.send(movies);
+					conn.query(videoQuery, function(err, videos) {
+						if (err) throw err;
+						var data = [count[0].count, videos.slice(offset, offset + rows)];
+						res.send(data);
+					});
 				});
 			});
 			conn.release();
