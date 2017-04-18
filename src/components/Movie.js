@@ -133,7 +133,7 @@ class Movie extends Component {
 				<div className="container well">
 					<div className="row">
 						<div className="col-sm-4 poster">
-							<img src="/img/posterplaceholder.png" />
+							<img className="center-block" src="/img/posterplaceholder.png" />
 						</div>
 						<div className="col-sm-8 description">
 							<h1 className="text-center site">{this.state.movie[0].title} ({this.state.movie[0].year})</h1>

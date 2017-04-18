@@ -341,7 +341,8 @@ tr:nth-child(even) td { background: #222; }
  *******************/
 
 .poster img {
-	width: 100%;
+	margin: 0 auto;
+	width: 60%;
 }
 
 .description .buttons a {

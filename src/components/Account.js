@@ -208,22 +208,16 @@ class Account extends Component {
 							handlePagination={this.handlePagination}
 							genres={this.state.genres} />
 
-						{this.state.pageCount > 0 && this.state.totalVideos > 0 && this.state.pagination &&
 							<div>
 								<h3 className="text-center site video-count">{this.state.totalVideos} results found</h3>
-								<Pagination
-									pageChange={this.pageChange}
-									pageChangeArrow={this.pageChangeArrow}
-									currentPage={this.state.currentPage}
-									pageCount={this.state.pageCount} />
+								{this.state.pageCount > 1 && this.state.totalVideos > 0 && this.state.pagination &&
+									<Pagination
+										pageChange={this.pageChange}
+										pageChangeArrow={this.pageChangeArrow}
+										currentPage={this.state.currentPage}
+										pageCount={this.state.pageCount} />
+								}
 							</div>
-						}
-
-						{!this.state.pagination &&
-						<div>
-							<h3 className="text-center site video-count">{this.state.totalVideos} results found</h3>
-						</div>
-						}
 						
 						<BrowseMovies videos={this.state.videos} />
 
@@ -239,7 +233,7 @@ class Account extends Component {
 							</div>
 						}
 
-						{this.state.pageCount > 0 && this.state.totalVideos > 0 && this.state.pagination &&
+						{this.state.pageCount > 1 && this.state.totalVideos > 0 && this.state.pagination &&
 							<Pagination
 								pageChange={this.pageChange}
 								pageChangeArrow={this.pageChangeArrow}
