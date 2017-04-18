@@ -478,6 +478,7 @@ input[type=range] {
 	background: transparent;
 	width: 100%;
 	margin: 0 5px;
+	cursor: pointer;
 }
 
 input[type=range]:focus {
@@ -486,7 +487,7 @@ input[type=range]:focus {
 
 input[type=range]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 8px;
+  height: 2px;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.6);
   transition: background 0.2s ease-in-out;
@@ -498,27 +499,29 @@ input[type=range]:hover::-webkit-slider-runnable-track {
 }
 
 input[type=range]::-webkit-slider-thumb {
+	border: 1px solid #000000;
   height: 15px;
-  width: 15px;
-  border-radius: 15px;
+  width: 8px;
+  border-radius: 3px;
   background: #cc181e;
   cursor: pointer;
   -webkit-appearance: none;
-  margin-top: -3.5px;
+  margin-top: -5.5px;
 }
 
 input[type=range]::-moz-range-track {
   width: 100%;
-  height: 8px;
+  height: 2px;
   cursor: pointer;
   background: #fff;
   border-radius: 2px;
 }
 
 input[type=range]::-moz-range-thumb {
+	border: 1px solid #000000;
   height: 15px;
-  width: 15px;
-  border-radius: 15px;
+  width: 8px;
+  border-radius: 3px;
   background: #cc181e;
   cursor: pointer;
 }
@@ -528,8 +531,29 @@ input[type=range]::-moz-range-thumb {
 	margin-bottom: 0;
 }
 
-.description-title,
-.description {
+.description-title {
 	border-top: 0;
+}
+
+.description-title h1 {
+	margin-top: 0;
+}
+
+.video-plot {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.description-title h1 a {
 	color: #eee;
+	cursor: pointer;
+	-webkit-transition: color 0.15s ease;
+	-moz-transition: color 0.15s ease;
+	-o-transition: color 0.15s ease;
+	-ms-transition: color 0.15s ease;
+	transition: color 0.15s ease;
+}
+
+.description-title h1 a:hover {
+	color: #5cb85c;
 }
